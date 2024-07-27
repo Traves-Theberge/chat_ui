@@ -39,11 +39,8 @@ export default function ChatPage() {
     let aiModel;
     if (model.startsWith('gpt')) {
       aiModel = models.openai;
-    } else if (model.startsWith('mistral')) {
-      aiModel = models.mistral;
     } else {
-      console.error('Unknown model selected:', model);
-      return;
+      aiModel = models.mistral;
     }
 
     try {

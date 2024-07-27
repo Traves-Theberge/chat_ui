@@ -6,6 +6,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const { messages, model } = req.body;
+      console.log(`Using OpenAI model: ${model}`);
       const completion = await openai.chat.completions.create({
         model: model || 'gpt-3.5-turbo',
         messages: messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
