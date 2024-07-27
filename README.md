@@ -95,8 +95,8 @@ This chat application provides a flexible interface for interacting with various
 - **React**: JavaScript library for building user interfaces
 - **Supabase**: Open-source Firebase alternative for authentication and database
 - **Tailwind CSS**: Utility-first CSS framework
-- **OpenAI API**: For GPT-3.5 model integration
-- **Mistral AI**: Alternative AI model for chat completions
+- **OpenAI API**: For GPT-4o, GPT-4o-mini, GPT-4-turbo, GPT-3.5-turbo-0125, and GPT-3.5-turbo (default) model integration
+- **Mistral AI**: Alternative AI models for chat completions, including mistral-tiny, mistral-small, mistral-medium, open-mistral-7b, open-mixtral-8x7b, open-mixtral-8x22b, mistral-small-2402, mistral-large-2402, mistral-large-2407, mistral-embed, codestral-2405, codestral-mamba-2407, and open-mistral-nemo
 - **Socket.io**: Real-time bidirectional event-based communication
 - **SWR**: React Hooks library for data fetching
 - **Zustand**: State management solution
