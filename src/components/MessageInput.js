@@ -5,8 +5,8 @@ import { useState } from 'react';
 export default function MessageInput({ onSendMessage }) {
   const [message, setMessage] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (message.trim()) {
       onSendMessage(message);
       setMessage('');
@@ -14,17 +14,22 @@ export default function MessageInput({ onSendMessage }) {
   };
 
   return (
-    <div className="p-4 bg-gray-800">
-      <form onSubmit={handleSubmit} className="flex">
+    <form onSubmit={handleSubmit} className="p-4 bg-gray-900 border-t border-gray-700">
+      <div className="flex">
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="flex-grow p-2 bg-gray-700 text-white rounded"
-          placeholder="Type a message"
+          placeholder="Type a message..."
+          className="flex-grow p-2 bg-gray-800 text-white border border-gray-700 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button type="submit" className="ml-2 p-2 bg-pink-500 text-white rounded">Send</button>
-      </form>
-    </div>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Send
+        </button>
+      </div>
+    </form>
   );
 }

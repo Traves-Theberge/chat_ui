@@ -1,13 +1,18 @@
 "use client";
 
 export default function ModelSelector({ model, setModel }) {
-  const models = ['default', 'gpt-3.5-turbo', 'gpt-4'];
+  const models = ['gpt-3.5-turbo', 'mistral-tiny'];
+
+  const handleModelChange = (e) => {
+    const selectedModel = e.target.value;
+    setModel(selectedModel);
+  };
 
   return (
-    <select value={model} onChange={(e) => setModel(e.target.value)} className="bg-gray-700 text-white rounded p-2">
-      {models.map((model) => (
-        <option key={model} value={model}>
-          {model}
+    <select value={model} onChange={handleModelChange} className="bg-gray-700 text-white rounded p-2">
+      {models.map((modelOption) => (
+        <option key={modelOption} value={modelOption}>
+          {modelOption}
         </option>
       ))}
     </select>

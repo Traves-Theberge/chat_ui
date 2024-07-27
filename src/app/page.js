@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AuthModal from '@/components/AuthModal';
+import supabase from '@/utils/supabaseClient';
 
 export default function HomePage() {
   const [isLoginVisible, setIsLoginVisible] = useState(false);
@@ -14,10 +15,29 @@ export default function HomePage() {
     setIsSignupVisible(false);
   };
 
-  const handleSuccess = () => {
-    closeModals();
-    router.push('/chat');
+  const handleSuccess = async (email, password) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      console.error('Login error:', error.message);
+    } else {
+      closeModals();
+      router.push('/chat');
+    }
   };
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        router.push('/login');
+      } else if (event === 'SIGNED_IN' && session) {
+        router.push('/chat');
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [router]); // Added router to the dependency array
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
@@ -31,13 +51,12 @@ export default function HomePage() {
         </button>
         <button
           className="w-full p-2 bg-pink-500 text-white rounded block text-center mt-4"
-          onClick={() => setIsSignupVisible(true)}
+          onClick={() => router.push('/signup')}
         >
           Sign Up
         </button>
       </div>
       <AuthModal isSignup={false} isVisible={isLoginVisible} closeModal={closeModals} onSuccess={handleSuccess} />
-      <AuthModal isSignup={true} isVisible={isSignupVisible} closeModal={closeModals} onSuccess={handleSuccess} />
     </div>
   );
 }

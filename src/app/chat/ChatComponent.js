@@ -5,17 +5,25 @@ import { useRouter } from 'next/navigation'; // Use next/navigation for client-s
 import ModalComponent from './ModalComponent';
 import ChatSessions from '@/components/ChatSessions';
 import MessageHandler from '@/components/MessageHandler';
+import { useSocket } from '@/hooks/useSocket';
 
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const router = useRouter();
+  const socket = useSocket('http://localhost:3000'); // Adjust URL as needed
 
   useEffect(() => {
-    // Fetch initial messages or set up WebSocket connection
-  }, []);
+    if (socket) {
+      socket.on('chat message', (message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      });
+    }
+  }, [socket]);
 
   const handleSendMessage = (message) => {
-    // Logic to send a message
+    if (socket) {
+      socket.emit('chat message', message);
+    }
   };
 
   return (
