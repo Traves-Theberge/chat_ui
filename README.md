@@ -9,6 +9,7 @@ Chat UI is a real-time chat application built with Next.js and Tailwind CSS. It 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Environment Variables](#environment-variables)
+- [Tech Stack](#tech-stack)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -68,6 +69,18 @@ The following environment variables are required for the project:
 
 Create a `.env.local` file in the root of the project and add the variables as shown below:
 
+
+## Tech Stack
+
+- **Next.js**: React framework for server-side rendering and routing
+- **React**: JavaScript library for building user interfaces
+- **Supabase**: Open-source Firebase alternative for authentication and database
+- **Tailwind CSS**: Utility-first CSS framework
+- **OpenAI API**: For GPT-3.5 model integration
+- **Mistral AI**: Alternative AI model for chat completions
+- **Socket.io**: Real-time bidirectional event-based communication
+- **SWR**: React Hooks library for data fetching
+- **Zustand**: State management solution
 
 ## Contributing
 
