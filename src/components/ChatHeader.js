@@ -1,6 +1,6 @@
 "use client";
 
-import ModelSelector from '@/components/modelSelector';
+import ModelSelector from '@/components/ModelSelector';
 
 export default function ChatHeader({ currentChat, model, setModel }) {
   return (

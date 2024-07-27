@@ -2,6 +2,59 @@
 
 Chat UI is a real-time chat application built with Next.js and Tailwind CSS. It features user authentication, chat session management, and the ability to select different chat models. The application is integrated with Supabase for storing chat sessions and message history.
 
+## Project Structure
+```
+chat_ui/
+├── node_modules/
+├── public/
+├── src/
+│   ├── app/
+│   │   ├── layout.js
+│   │   ├── page.js
+│   │   ├── chat/
+│   │   │   ├── page.js
+│   │   │   ├── ChatComponent.js
+│   │   │   └── ModalComponent.js
+│   ├── components/
+│   │   ├── Sidebar.js
+│   │   ├── ChatHeader.js
+│   │   ├── ChatMessages.js
+│   │   ├── MessageInput.js
+│   │   ├── ChatSessions.js
+│   │   ├── MessageHandler.js
+│   │   ├── AuthModal.js
+│   │   ├── AuthForm.js 
+│   │   └── ModelSelector.js
+│   ├── middleware/
+│   │   └── auth.js
+│   ├── styles/
+│   │   └── globals.css
+│   ├── utils/
+│   │   ├── api.js
+│   │   ├── socket.js
+│   │   └── supabaseClient.js
+│   ├── pages/
+│   │   ├── api/
+│   │   │   ├── auth/
+│   │   │   │   ├── login.js
+│   │   │   │   └── signup.js
+│   │   ├── auth/
+│   │   │   ├── login.js
+│   │   │   └── signup.js
+│   │   ├── _app.js
+│   │   └── _document.js
+├── jsconfig.json
+├── .gitignore
+├── postcss.config.js
+├── postcss.config.mjs
+├── .eslintrc.json
+├── tailwind.config.js
+├── package.json
+├── package-lock.json
+├── README.md
+└── .env.local
+```
+
 ## Table of Contents
 
 - [Features](#features)
@@ -70,3 +123,29 @@ Create a `.env.local` file in the root of the project and add the variables as s
 NEXT_PUBLIC_SUPABASE_URL=https://your-supabase-url.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
+
+ontributing
+Contributions are welcome! To contribute:
+
+Fork the repository.
+Create a new branch: git checkout -b feature-branch-name
+Make your changes and commit them: git commit -m 'Add some feature'
+Push to the branch: git push origin feature-branch-name
+Open a pull request.
+Please ensure your code follows the project's coding conventions and standards.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for more information.
+
+
+### Summary
+
+This `README.md` provides a clear and concise overview of your project, including installation instructions, usage guidelines, and details on environment variables. It also invites contributions and provides licensing information.
+
+Would you like to proceed with this `README.md`, or is there anything specific you'd like to add or modify?
+
+
+
+
+
+
