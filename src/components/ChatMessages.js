@@ -11,19 +11,21 @@ export default function ChatMessages({ messages }) {
   useEffect(scrollToBottom, [messages]);
 
   return (
-    <div className="flex-grow p-4 overflow-y-auto bg-gray-800">
+    <div className="flex-grow p-4 overflow-y-auto bg-gradient-to-b from-gray-900 to-gray-800">
       {messages.map((message, index) => (
         <div
           key={index}
           className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
         >
           <div
-            className={`max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl rounded-lg p-3 ${
-              message.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
-            }`}
+            className={`max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl rounded-2xl p-4 ${
+              message.sender === 'user' 
+                ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-white' 
+                : 'bg-gradient-to-r from-gray-600 to-gray-600 text-white'
+            } shadow-lg`}
           >
-            <p>{message.content}</p>
-            <p className="text-xs mt-1 opacity-70">
+            <p className="text-sm md:text-base">{message.content}</p>
+            <p className="text-xs mt-2 opacity-70">
               {message.sender === 'user' ? 'You' : 'AI'}
             </p>
           </div>

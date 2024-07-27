@@ -6,8 +6,9 @@ import { debounce } from 'lodash';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function Sidebar({ setCurrentChat }) {
+export default function Sidebar({ setCurrentChat, currentChat }) {
   const [chats, setChats] = useState([]);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     fetchChats();
@@ -48,19 +49,17 @@ export default function Sidebar({ setCurrentChat }) {
     }
   };
 
-  const debouncedDeleteChat = debounce(async (chatId) => {
+  const handleDeleteChat = async (chatId) => {
     const { error } = await supabase.from('chat_sessions').delete().eq('id', chatId);
     if (error) {
       toast.error('Error deleting chat session: ' + error.message);
     } else {
       setChats(chats => chats.filter(chat => chat.id !== chatId));
-      setCurrentChat(null);
+      if (currentChat === chatId) {
+        setCurrentChat(null);
+      }
       toast.success('Chat session deleted successfully');
     }
-  }, 300);
-
-  const handleDeleteChat = (chatId) => {
-    debouncedDeleteChat(chatId);
   };
 
   const handleLogout = async () => {
@@ -74,42 +73,55 @@ export default function Sidebar({ setCurrentChat }) {
   };
 
   return (
-    <nav className="w-64 bg-gray-800 p-4 text-white" aria-label="Chat sessions">
-      <h2 className="text-xl mb-4">Chats</h2>
-      <ul>
-        {chats.map((chat) => (
-          <li key={chat.id} className="mb-2 flex justify-between items-center">
+    <div className={`bg-gray-900 text-white flex flex-col transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>
+      <div className="p-4 bg-gray-800 flex justify-between items-center h-16">
+        {!isCollapsed && <h1 className="text-xl font-semibold">Chat History</h1>}
+        <button onClick={() => setIsCollapsed(!isCollapsed)} className="text-white">
+          {isCollapsed ? '→' : '←'}
+        </button>
+      </div>
+      {!isCollapsed && (
+        <>
+          <div className="flex-grow overflow-y-auto">
+            <div className="p-4 space-y-2">
+              {chats.map((chat) => (
+                <div
+                  key={chat.id}
+                  className={`p-3 rounded-lg cursor-pointer transition duration-200 flex justify-between items-center ${
+                    currentChat === chat.id
+                      ? 'bg-gray-700 text-white'
+                      : 'bg-gray-800 hover:bg-gray-700'
+                  }`}
+                >
+                  <span onClick={() => setCurrentChat(chat.id)}>{chat.session_name}</span>
+                  <button
+                    onClick={() => handleDeleteChat(chat.id)}
+                    className="text-red-400 hover:text-red-300 transition duration-200"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="p-4 space-y-2">
             <button
-              className="text-left cursor-pointer flex-grow"
-              onClick={() => setCurrentChat(chat.id)}
-              aria-label={`Select chat: ${chat.session_name}`}
+              onClick={handleAddChat}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
             >
-              {chat.session_name}
+              New Chat
             </button>
             <button
-              onClick={() => handleDeleteChat(chat.id)}
-              aria-label={`Delete chat: ${chat.session_name}`}
-              className="text-red-500 hover:text-red-700 ml-2"
+              onClick={handleLogout}
+              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
             >
-              Delete
+              Logout
             </button>
-          </li>
-        ))}
-      </ul>
-      <button
-        onClick={handleAddChat}
-        className="mt-4 w-full p-2 bg-green-500 text-white rounded"
-        aria-label="Add new chat"
-      >
-        Add Chat
-      </button>
-      <button
-        onClick={handleLogout}
-        className="mt-4 w-full p-2 bg-red-500 text-white rounded"
-        aria-label="Logout"
-      >
-        Logout
-      </button>
-    </nav>
+          </div>
+        </>
+      )}
+    </div>
   );
 }

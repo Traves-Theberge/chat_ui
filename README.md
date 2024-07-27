@@ -2,58 +2,6 @@
 
 Chat UI is a real-time chat application built with Next.js and Tailwind CSS. It features user authentication, chat session management, and the ability to select different chat models. The application is integrated with Supabase for storing chat sessions and message history.
 
-## Project Structure
-```
-chat_ui/
-├── node_modules/
-├── public/
-├── src/
-│   ├── app/
-│   │   ├── layout.js
-│   │   ├── page.js
-│   │   ├── chat/
-│   │   │   ├── page.js
-│   │   │   ├── ChatComponent.js
-│   │   │   └── ModalComponent.js
-│   ├── components/
-│   │   ├── Sidebar.js
-│   │   ├── ChatHeader.js
-│   │   ├── ChatMessages.js
-│   │   ├── MessageInput.js
-│   │   ├── ChatSessions.js
-│   │   ├── MessageHandler.js
-│   │   ├── AuthModal.js
-│   │   ├── AuthForm.js 
-│   │   └── ModelSelector.js
-│   ├── middleware/
-│   │   └── auth.js
-│   ├── styles/
-│   │   └── globals.css
-│   ├── utils/
-│   │   ├── api.js
-│   │   ├── socket.js
-│   │   └── supabaseClient.js
-│   ├── pages/
-│   │   ├── api/
-│   │   │   ├── auth/
-│   │   │   │   ├── login.js
-│   │   │   │   └── signup.js
-│   │   ├── auth/
-│   │   │   ├── login.js
-│   │   │   └── signup.js
-│   │   ├── _app.js
-│   │   └── _document.js
-├── jsconfig.json
-├── .gitignore
-├── postcss.config.js
-├── postcss.config.mjs
-├── .eslintrc.json
-├── tailwind.config.js
-├── package.json
-├── package-lock.json
-├── README.md
-└── .env.local
-```
 
 ## Table of Contents
 
@@ -66,12 +14,12 @@ chat_ui/
 
 ## Features
 
-- User authentication (signup, login, and logout)
-- Real-time messaging
-- Chat session management (add and delete chats)
+- User authentication (signup, login, and logout) with Supabase
+- Real-time messaging with Supabase
+- Chat session management (create, read, update, and delete chats)
 - Model selection for different chat interactions
-- Responsive UI with Tailwind CSS
-- Data storage with Supabase
+- Responsive UI built with Tailwind CSS
+- Data storage and retrieval using Supabase
 
 ## Installation
 
@@ -103,12 +51,11 @@ To get started with the Chat UI project, follow these steps:
 5. Open your browser and navigate to `http://localhost:3000`.
 
 ## Usage
-
-- **Login/Signup**: Use the login and signup modals to authenticate users.
-- **Add Chat**: Use the sidebar button to add new chat sessions.
-- **Delete Chat**: Click the delete button next to each chat session in the sidebar to remove it.
-- **Select Model**: Use the dropdown in the chat header to select different chat models.
-- **Send Message**: Use the message input bar at the bottom of the chat area to send messages.
+- **Login/Signup**: Authenticate users using the login and signup modals.
+- **Add Chat**: Add new chat sessions using the button in the sidebar.
+- **Delete Chat**: Remove chat sessions by clicking the delete button next to each chat in the sidebar.
+- **Select Model**: Choose different chat models using the dropdown in the chat header.
+- **Send Message**: Send messages using the input bar at the bottom of the chat area.
 
 ## Environment Variables
 
@@ -116,26 +63,27 @@ The following environment variables are required for the project:
 
 - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL.
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon key.
+- `MISTRAL_API_KEY`: Your Mistral API key for chat completions.
+- `OPENAI_API_KEY`: Your OpenAI API key for additional AI capabilities.
 
 Create a `.env.local` file in the root of the project and add the variables as shown below:
 
-```
-NEXT_PUBLIC_SUPABASE_URL=https://your-supabase-url.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-```
 
-ontributing
-Contributions are welcome! To contribute:
+## Contributing
 
-Fork the repository.
-Create a new branch: git checkout -b feature-branch-name
-Make your changes and commit them: git commit -m 'Add some feature'
-Push to the branch: git push origin feature-branch-name
-Open a pull request.
-Please ensure your code follows the project's coding conventions and standards.
+We welcome contributions! To get started:
 
-License
-This project is licensed under the MIT License. See the LICENSE file for more information.
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature-branch-name`
+3. Make your changes and commit them: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature-branch-name`
+5. Open a pull request.
+
+Please ensure your code adheres to the project's coding conventions and standards.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
 
 ### Summary

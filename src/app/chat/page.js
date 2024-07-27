@@ -132,7 +132,7 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
-      <Sidebar setCurrentChat={setCurrentChat} />
+      <Sidebar setCurrentChat={setCurrentChat} currentChat={currentChat} />
       <div className="flex flex-col flex-grow">
         <ChatHeader currentChat={currentChat} model={model} setModel={setModel} />
         <ChatMessages messages={messages} />
