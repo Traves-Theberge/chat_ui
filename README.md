@@ -27,14 +27,14 @@ To get started with the Chat UI project, follow these steps:
 
 1. Clone the repository:
 
-    ```bash
+    ```
     git clone https://github.com/your-username/chat_ui.git
     cd chat_ui
     ```
 
 2. Install the dependencies:
 
-    ```bash
+    ```
     npm install
     ```
 
@@ -44,7 +44,7 @@ To get started with the Chat UI project, follow these steps:
 
 4. Run the development server:
 
-    ```bash
+    ```
     npm run dev
     ```
 
