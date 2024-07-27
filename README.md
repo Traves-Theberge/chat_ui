@@ -1,5 +1,4 @@
 # Chat UI
-# Chat UI
 
 ## Use at your own caution
 
