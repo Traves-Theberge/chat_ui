@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'; // Import react-toastify CSS
 import ModalComponent from '@/app/chat/ModalComponent'; // Import ModalComponent
 
 // Define the Sidebar component
-export default function Sidebar({ setCurrentChat, currentChat }) {
+export default function Sidebar({ setCurrentChat, currentChat, onChatDelete }) {
   const [chats, setChats] = useState([]); // State to manage chat sessions
   const [isCollapsed, setIsCollapsed] = useState(false); // State to manage sidebar collapse
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal open/close
@@ -91,9 +91,14 @@ export default function Sidebar({ setCurrentChat, currentChat }) {
     if (error) {
       toast.error('Error deleting chat session: ' + error.message); // Show error toast if deletion fails
     } else {
-      setChats(chats => chats.filter(chat => chat.id !== chatId)); // Update chat sessions state
+      setChats(chats => {
+        const updatedChats = chats.filter(chat => chat.id !== chatId);
+        console.log('Updated chats:', updatedChats); // Debugging log
+        return updatedChats;
+      }); // Update chat sessions state
       if (currentChat === chatId) {
         setCurrentChat(null); // Reset current chat if it was deleted
+        onChatDelete(chatId); // Clear the messages for the deleted chat
       }
       toast.success('Chat session deleted successfully'); // Show success toast
     }

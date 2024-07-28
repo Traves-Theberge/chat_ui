@@ -142,10 +142,20 @@ export default function ChatPage() {
     }
   };
 
+  const handleChatDelete = (deletedChatId) => {
+    if (currentChat === deletedChatId) {
+      setMessages([]);
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       {/* Sidebar component to select chat sessions */}
-      <Sidebar setCurrentChat={setCurrentChat} currentChat={currentChat} />
+      <Sidebar 
+        setCurrentChat={setCurrentChat} 
+        currentChat={currentChat} 
+        onChatDelete={handleChatDelete}
+      />
       <div className="flex flex-col flex-grow">
         {/* Chat header component */}
         <ChatHeader currentChat={currentChat} model={model} setModel={setModel} />
