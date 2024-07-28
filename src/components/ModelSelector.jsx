@@ -1,6 +1,8 @@
-"use client";
+"use client"; // Indicates that this file is a client-side module
 
+// Define the ModelSelector component
 export default function ModelSelector({ model, setModel }) {
+  // List of available models
   const models = [
     'gpt-4o',
     'gpt-4o-mini',
@@ -21,16 +23,18 @@ export default function ModelSelector({ model, setModel }) {
     'open-mistral-nemo'
   ];
 
+  // Function to handle model change
   const handleModelChange = (e) => {
-    const selectedModel = e.target.value;
-    setModel(selectedModel);
+    const selectedModel = e.target.value; // Get the selected model
+    setModel(selectedModel); // Update the model state
   };
 
   return (
+    // Dropdown select element for model selection
     <select value={model} onChange={handleModelChange} className="bg-gray-700 text-white rounded p-2">
       {models.map((modelOption) => (
         <option key={modelOption} value={modelOption}>
-          {modelOption}
+          {modelOption} {/* Display model option */}
         </option>
       ))}
     </select>
