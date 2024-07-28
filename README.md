@@ -2,14 +2,13 @@
 A real-time chat interface enabling users to communicate with multiple AI models, such as OpenAI's GPT models and Mistral AI's language models.
 
 ## Home
-![Homepage](<Screenshot 2024-07-28 055119.jpg>)
+![Home](<Screenshot 2024-07-28 050736.jpg>) 
 
 ## Login
-![login](<Screenshot 2024-07-28 050736.jpg>) 
+![Login](<Screenshot 2024-07-28 050849.jpg>)
 
 ## Chat UI
-![Chatui](<Screenshot 2024-07-28 050849.jpg>)
-
+![ChatUI](<Screenshot 2024-07-28 055119.jpg>)
 
 ## Table of Contents
 
