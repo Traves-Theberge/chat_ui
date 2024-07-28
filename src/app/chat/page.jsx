@@ -3,11 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
-import ChatHeader from '@/components/ChatHeader';
-import ChatMessages from '@/components/ChatMessages';
-import MessageInput from '@/components/MessageInput';
-import supabase from '@/utils/supabaseClient';
-import initializeModels from '@/utils/modelClients';
+import ChatHeader from '@/components/ChatHeader.jsx';
+import ChatMessages from '@/components/ChatMessages.jsx';
+import MessageInput from '@/components/MessageInput.jsx';
+import supabase from '@/utils/supabaseClient.jsx';
+import initializeModels from '@/utils/modelClients.jsx';
 
 export default function ChatPage() {
   const [currentChat, setCurrentChat] = useState(null);
