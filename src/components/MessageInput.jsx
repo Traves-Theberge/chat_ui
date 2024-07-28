@@ -1,11 +1,14 @@
 "use client"; // Indicates that this file is a client-side module
 
-import { useState, useCallback } from 'react'; // Import the useState and useCallback hooks from React
+import { useState, useRef, useEffect, useCallback } from 'react'; // Import the useState, useRef, useEffect, and useCallback hooks from React
 import debounce from 'lodash/debounce'; // Import the debounce function from Lodash
+import EmojiPicker from 'emoji-picker-react'; // Import the EmojiPicker component
 
 // Define the MessageInput component
 export default function MessageInput({ onSendMessage }) {
   const [message, setMessage] = useState(''); // State to manage the input message
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const textareaRef = useRef(null);
 
   // Debounced function to send the message
   const debouncedSendMessage = useCallback(
@@ -24,15 +27,40 @@ export default function MessageInput({ onSendMessage }) {
     }
   };
 
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, [message]);
+
+  const handleEmojiClick = (emojiObject) => {
+    setMessage(prevMessage => prevMessage + emojiObject.emoji);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="p-4 bg-gray-800 border-t border-gray-700"> {/* Form element with styles */}
-      <div className="flex items-center space-x-2"> {/* Container div with flexbox styles */}
-        <input
+      <div className="relative flex items-end space-x-2"> {/* Container div with flexbox styles */}
+        <button
+          type="button"
+          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          className="text-gray-400 hover:text-white transition-colors"
+        >
+          😊
+        </button>
+        {showEmojiPicker && (
+          <div className="absolute bottom-full mb-2">
+            <EmojiPicker onEmojiClick={handleEmojiClick} />
+          </div>
+        )}
+        <textarea
+          ref={textareaRef}
           type="text" // Input type is text
           value={message} // Bind the input value to the message state
           onChange={(e) => setMessage(e.target.value)} // Update the message state on input change
-          className="flex-grow p-3 bg-gray-700 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" // Input element styles
+          className="flex-grow p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none" // Input element styles
           placeholder="Type your message..." // Placeholder text for the input
+          rows={1}
         />
         <button
           type="submit" // Button type is submit

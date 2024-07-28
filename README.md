@@ -1,6 +1,5 @@
 # Chat UI
-
-A real-time chat interface that allows users to interact with various AI models, including OpenAI's GPT models and Mistral AI's language models.
+A real-time chat interface enabling users to communicate with multiple AI models, such as OpenAI's GPT models and Mistral AI's language models.
 
 ## Table of Contents
 
@@ -14,48 +13,47 @@ A real-time chat interface that allows users to interact with various AI models,
 - [License](#license)
 
 ## Project Structure
-
 ```
 src/
-┣ app/
-┃ ┣ chat/
-┃ ┃ ┣ ChatComponent.jsx
-┃ ┃ ┣ ModalComponent.jsx
-┃ ┃ ┗ page.jsx
-┃ ┣ login/
-┃ ┃ ┗ page.jsx
-┃ ┣ signup/
-┃ ┃ ┗ page.jsx
-┃ ┣ layout.jsx
-┃ ┗ page.jsx
-┣ components/
-┃ ┣ AuthForm.jsx
-┃ ┣ AuthModal.jsx
-┃ ┣ ChatHeader.jsx
-┃ ┣ ChatMessages.jsx
-┃ ┣ ChatSessions.jsx
-┃ ┣ MessageInput.jsx
-┃ ┣ ModelSelector.jsx
-┃ ┗ Sidebar.jsx
-┣ hooks/
-┃ ┗ useSocket.jsx
-┣ middleware/
-┃ ┗ auth.jsx
-┣ pages/
-┃ ┣ api/
-┃ ┃ ┣ mistral.jsx
-┃ ┃ ┗ openai.jsx
-┃ ┣ _app.jsx
-┃ ┗ _document.jsx
-┣ store/
-┃ ┗ chatStore.jsx
-┣ styles/
-┃ ┗ globals.css
-┗ utils/
-  ┣ api.jsx
-  ┣ modelClients.jsx
-  ┣ socket.jsx
-  ┗ supabaseClient.jsx
+├── app/
+│   ├── chat/
+│   │   ├── ChatComponent.jsx
+│   │   ├── ModalComponent.jsx
+│   │   └── page.jsx
+│   ├── login/
+│   │   └── page.jsx
+│   ├── signup/
+│   │   └── page.jsx
+│   ├── layout.jsx
+│   └── page.jsx
+├── components/
+│   ├── AuthForm.jsx
+│   ├── AuthModal.jsx
+│   ├── ChatHeader.jsx
+│   ├── ChatMessages.jsx
+│   ├── ChatSessions.jsx
+│   ├── MessageInput.jsx
+│   ├── ModelSelector.jsx
+│   └── Sidebar.jsx
+├── hooks/
+│   └── useSocket.jsx
+├── middleware/
+│   └── auth.jsx
+├── pages/
+│   ├── api/
+│   │   ├── mistral.jsx
+│   │   └── openai.jsx
+│   ├── _app.jsx
+│   └── _document.jsx
+├── store/
+│   └── chatStore.jsx
+├── styles/
+│   └── globals.css
+└── utils/
+    ├── api.jsx
+    ├── modelClients.jsx
+    ├── socket.jsx
+    └── supabaseClient.jsx
 .env.local
 .eslintrc.json
 .gitignore
@@ -84,15 +82,15 @@ tailwind.config.js
 
 ## Tech Stack
 
-- **Next.js**: React framework for server-side rendering and routing
-- **React**: JavaScript library for building user interfaces
-- **Supabase**: Open-source Firebase alternative for authentication and database
-- **Tailwind CSS**: Utility-first CSS framework
-- **OpenAI API**: For GPT model integration
-- **Mistral AI**: Alternative AI models for chat completions
-- **Socket.io**: Real-time bidirectional event-based communication
-- **SWR**: React Hooks library for data fetching
-- **Zustand**: State management solution
+- **Next.js**: A React framework for server-side rendering and routing.
+- **React**: A JavaScript library for building user interfaces.
+- **Supabase**: An open-source Firebase alternative for authentication and database.
+- **Tailwind CSS**: A utility-first CSS framework.
+- **OpenAI API**: Provides GPT model integration.
+- **Mistral AI**: Offers alternative AI models for chat completions.
+- **Socket.io**: Enables real-time bidirectional event-based communication.
+- **SWR**: A React Hooks library for data fetching.
+- **Zustand**: A state management solution.
 
 ## Installation
 
@@ -121,11 +119,11 @@ To get started with the Chat UI project, follow these steps:
 
 ## Usage
 
-- **Login/Signup**: Authenticate users using the login and signup modals.
-- **Add Chat**: Add new chat sessions using the button in the sidebar.
-- **Delete Chat**: Remove chat sessions by clicking the delete button next to each chat in the sidebar.
-- **Select Model**: Choose different chat models using the dropdown in the chat header.
-- **Send Message**: Send messages using the input bar at the bottom of the chat area.
+- **Login/Signup**: Users can authenticate using the login and signup modals.
+- **Add Chat**: Users can create new chat sessions using the button in the sidebar.
+- **Delete Chat**: Users can delete chat sessions by clicking the delete button next to each chat in the sidebar.
+- **Select Model**: Users can select different chat models using the dropdown in the chat header.
+- **Send Message**: Users can send messages using the input bar at the bottom of the chat area.
 
 ## Environment Variables
 
