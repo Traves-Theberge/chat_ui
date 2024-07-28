@@ -27,11 +27,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
-      {/* Authentication form component */}
-      <AuthForm isSignup={false} handleSubmit={handleLogin} />
-      {/* Display feedback message if it exists */}
-      {feedback && <div className="mt-4 text-red-500 text-center">{feedback}</div>}
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white p-4">
+      <div className="w-full max-w-md">
+        <AuthForm isSignup={false} handleSubmit={handleLogin} />
+        {feedback && <div className="mt-4 text-red-500 text-center">{feedback}</div>}
+      </div>
     </div>
   );
 }

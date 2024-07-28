@@ -1,21 +1,58 @@
 "use client"; // Indicates that this file is a client-side module
 
+import { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import AuthForm from './AuthForm'; // Import the AuthForm component
 
 // Define the AuthModal component
 export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }) {
-  // If the modal is not visible, return null (do not render anything)
-  if (!isVisible) return null;
+  useEffect(() => {
+    if (isVisible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isVisible]);
 
-  // Render the modal
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: 'easeOut' } },
+    exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3, ease: 'easeIn' } }
+  };
+
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-        {/* Close button for the modal */}
-        <button className="text-white mb-4" onClick={closeModal}>X</button>
-        {/* Render the AuthForm component */}
-        <AuthForm isSignup={isSignup} handleSubmit={onSuccess} />
-      </div>
-    </div>
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-md flex items-center justify-center z-50 p-6"
+        >
+          <motion.div
+            variants={modalVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl p-8 w-full max-w-md relative overflow-hidden"
+          >
+            <motion.button 
+              className="absolute top-6 right-6 text-gray-300 hover:text-white transition-colors z-10 p-4 rounded-full bg-gray-700 bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-white"
+              onClick={closeModal}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.8 }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </motion.button>
+            <AuthForm isSignup={isSignup} handleSubmit={onSuccess} />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

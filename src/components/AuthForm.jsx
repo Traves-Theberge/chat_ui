@@ -2,6 +2,7 @@
 
 // Import necessary hooks from React
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // AuthForm component definition
 export default function AuthForm({ isSignup, handleSubmit }) {
@@ -12,7 +13,6 @@ export default function AuthForm({ isSignup, handleSubmit }) {
   // State to manage feedback messages
   const [feedback, setFeedback] = useState('');
 
-  // Function to handle form submission
   const onSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
     setFeedback(''); // Clear any existing feedback messages
@@ -32,37 +32,82 @@ export default function AuthForm({ isSignup, handleSubmit }) {
     }
   };
 
+  const inputVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 20 } }
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 }
+  };
+
+  const formVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    exit: { opacity: 0, y: 50, transition: { duration: 0.5 } }
+  };
+
   return (
-    <div className="bg-gray-800 p-8 rounded-lg w-full max-w-md">
-      <h2 className="text-2xl mb-4">{isSignup ? 'Sign Up' : 'Login'}</h2> {/* Display form title based on isSignup prop */}
-      <form onSubmit={onSubmit}> {/* Form submission handler */}
-        <div className="mb-4">
-          <label htmlFor="email" className="block mb-2">Email</label> {/* Email input label */}
+    <motion.div
+      variants={formVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl p-8 w-full max-w-md"
+    >
+      <motion.h2
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-4xl mb-6 text-white font-bold text-center"
+      >
+        {isSignup ? 'Sign Up' : 'Login'}
+      </motion.h2>
+      <form onSubmit={onSubmit}>
+        <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-4">
+          <label htmlFor="email" className="block mb-2 text-gray-300">Email</label>
           <input
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Update email state on input change
+            onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full p-2 rounded bg-gray-700 text-white"
+            className="w-full p-3 rounded-lg bg-gray-800 bg-opacity-50 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
           />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="block mb-2">Password</label> {/* Password input label */}
+        </motion.div>
+        <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-6">
+          <label htmlFor="password" className="block mb-2 text-gray-300">Password</label>
           <input
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} // Update password state on input change
+            onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-2 rounded bg-gray-700 text-white"
+            className="w-full p-3 rounded-lg bg-gray-800 bg-opacity-50 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
           />
-        </div>
-        <button type="submit" className="w-full p-2 bg-pink-500 text-white rounded">
-          {isSignup ? 'Sign Up' : 'Login'} {/* Button text based on isSignup prop */}
-        </button>
+        </motion.div>
+        <motion.button
+          type="submit"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+          className="w-full p-3 bg-pink-600 text-white rounded-lg font-semibold transition duration-300 ease-in-out transform hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
+        >
+          {isSignup ? 'Sign Up' : 'Login'}
+        </motion.button>
       </form>
-      {feedback && <div className="mt-4 text-red-500">{feedback}</div>} {/* Display feedback message if it exists */}
-    </div>
+      <AnimatePresence>
+        {feedback && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="mt-4 text-red-500 text-center"
+          >
+            {feedback}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

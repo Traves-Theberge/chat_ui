@@ -3,11 +3,12 @@
 // Import necessary hooks and components
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthForm from '@/components/AuthForm';
+import AuthModal from '@/components/AuthModal';
 import supabase from '@/utils/supabaseClient';
 
 export default function SignupPage() {
   // State to manage feedback messages
+  const [isSignupVisible, setIsSignupVisible] = useState(true);
   const [feedback, setFeedback] = useState('');
   // Router instance from Next.js
   const router = useRouter();
@@ -26,12 +27,17 @@ export default function SignupPage() {
     }
   };
 
+  const closeModals = () => {
+    setIsSignupVisible(false);
+    router.push('/');
+  };
+
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
-      {/* Authentication form component */}
-      <AuthForm isSignup={true} handleSubmit={handleSignup} />
-      {/* Display feedback message if it exists */}
-      {feedback && <div className="mt-4 text-red-500 text-center">{feedback}</div>}
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white p-4">
+      <div className="w-full max-w-md">
+        <AuthModal isSignup={true} isVisible={isSignupVisible} closeModal={closeModals} onSuccess={handleSignup} />
+        {feedback && <div className="mt-4 text-red-500 text-center">{feedback}</div>}
+      </div>
     </div>
   );
 }

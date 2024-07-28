@@ -1,77 +1,87 @@
 "use client";
 
-// Import necessary hooks and components
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import AuthModal from '@/components/AuthModal';
 import supabase from '@/utils/supabaseClient';
 
 export default function HomePage() {
-  // State to manage the visibility of login modal
   const [isLoginVisible, setIsLoginVisible] = useState(false);
-  // State to manage the visibility of signup modal
   const [isSignupVisible, setIsSignupVisible] = useState(false);
-  // Router instance from Next.js
   const router = useRouter();
 
-  // Function to close both modals
   const closeModals = () => {
     setIsLoginVisible(false);
     setIsSignupVisible(false);
   };
 
-  // Function to handle successful login
   const handleSuccess = async (email, password) => {
-    // Attempt to sign in with email and password
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      // Log error message if there's an error
       console.error('Login error:', error.message);
     } else {
-      // Close modals and redirect to chat page on successful login
       closeModals();
       router.push('/chat');
     }
   };
 
-  // Effect to handle authentication state changes
   useEffect(() => {
-    // Listen for authentication state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT') {
-        // Redirect to login page on sign out
         router.push('/login');
       } else if (event === 'SIGNED_IN' && session) {
-        // Redirect to chat page on sign in
         router.push('/chat');
       }
     });
 
-    // Cleanup the listener on component unmount
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [router]); // Added router to the dependency array
+  }, [router]);
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
-      <div className="w-full max-w-md p-8 bg-gray-800 rounded-lg">
-        <h1 className="text-2xl mb-6 text-center">Welcome to Chatbot</h1>
-        <button
-          className="w-full p-2 bg-pink-500 text-white rounded block text-center"
-          onClick={() => setIsLoginVisible(true)}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white p-4"
+    >
+      <div className="w-full max-w-md">
+        <motion.div
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="text-center mb-8"
         >
-          Login
-        </button>
-        <button
-          className="w-full p-2 bg-pink-500 text-white rounded block text-center mt-4"
-          onClick={() => router.push('/signup')}
+          <h1 className="text-4xl font-bold mb-2">Welcome to Chat UI</h1>
+          <p className="text-gray-300">Your AI-powered conversation companion</p>
+        </motion.div>
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl p-8"
         >
-          Sign Up
-        </button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full p-3 bg-pink-600 text-white rounded-lg font-semibold mb-4 transition duration-300 ease-in-out transform hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
+            onClick={() => setIsLoginVisible(true)}
+          >
+            Login
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full p-3 bg-purple-600 text-white rounded-lg font-semibold transition duration-300 ease-in-out transform hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+            onClick={() => router.push('/signup')}
+          >
+            Sign Up
+          </motion.button>
+        </motion.div>
       </div>
-      {/* Authentication modal component */}
       <AuthModal isSignup={false} isVisible={isLoginVisible} closeModal={closeModals} onSuccess={handleSuccess} />
-    </div>
+    </motion.div>
   );
 }

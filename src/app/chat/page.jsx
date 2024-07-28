@@ -150,7 +150,7 @@ export default function ChatPage() {
         {/* Chat header component */}
         <ChatHeader currentChat={currentChat} model={model} setModel={setModel} />
         {/* Chat messages component */}
-        <ChatMessages messages={messages} />
+        <ChatMessages messages={messages} isLoading={isLoading} />
         {/* Message input component */}
         <MessageInput onSendMessage={handleSendMessage} model={model} />
       </div>

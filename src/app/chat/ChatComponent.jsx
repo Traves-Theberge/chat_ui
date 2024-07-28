@@ -18,6 +18,8 @@ const ChatComponent = () => {
   const router = useRouter();
   // Socket instance for real-time communication
   const socket = useSocket('http://localhost:3000');
+  // State to track if a message is being processed
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (socket) {
@@ -29,20 +31,20 @@ const ChatComponent = () => {
 
       // Listen for 'stream chunk' event and update streamingMessage state
       socket.on('stream chunk', (chunk) => {
-        setPartialResponse((prev) => prev + chunk);
+        setStreamingMessage((prev) => prev + chunk);
       });
 
       // Listen for 'stream end' event, update messages state and reset streamingMessage
       socket.on('stream end', () => {
         setMessages((prevMessages) => [
           ...prevMessages,
-          { sender: 'AI', content: partialResponse }
+          { sender: 'AI', content: streamingMessage }
         ]);
-        setPartialResponse('');
+        setStreamingMessage(null);
         setIsLoading(false);
       });
     }
-  }, [socket, partialResponse]);
+  }, [socket, streamingMessage]);
 
   // Function to handle sending a message
   const handleSendMessage = useCallback((message) => {
@@ -56,7 +58,7 @@ const ChatComponent = () => {
     <div className="chat-container flex flex-col h-screen">
       <ChatSessions />
       <div className="flex-grow overflow-hidden">
-        <ChatMessages messages={messages} streamingMessage={streamingMessage} />
+        <ChatMessages messages={messages} streamingMessage={streamingMessage} isLoading={isLoading} />
       </div>
       <MessageInput onSendMessage={handleSendMessage} />
       <ModalComponent />
