@@ -39,7 +39,7 @@ export default function ChatMessages({ messages, isLoading, partialResponse }) {
 
   return (
     // Container for chat messages
-    <div className="flex flex-col flex-grow overflow-y-auto p-4">
+    <div className="flex flex-col flex-grow overflow-y-auto p-4 overflow-x-hidden">
       {/* Loading indicator */}
       {isLoading && (
         <div className="flex items-center justify-center h-full">
