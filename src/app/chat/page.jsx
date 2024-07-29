@@ -8,12 +8,11 @@ import Sidebar from '@/components/Sidebar';
 import ChatHeader from '@/components/ChatHeader.jsx';
 import ChatMessages from '@/components/ChatMessages.jsx';
 import MessageInput from '@/components/MessageInput.jsx';
-import supabase from '@/utils/supabaseClient.jsx';
 import initializeModels from '@/utils/modelClients.jsx';
 import useChatStore from '@/store/chatStore';
 import useAuth from '@/hooks/useAuth';
-import { toast } from 'react-toastify'; // Import toast function from react-toastify
-import 'react-toastify/dist/ReactToastify.css'; // Import react-toastify CSS
+import { toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 export default function ChatPage() {
   // State to manage the selected AI model

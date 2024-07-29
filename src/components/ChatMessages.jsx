@@ -1,6 +1,5 @@
 "use client"; // Indicates that this file is a client-side module
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { motion } from 'framer-motion'; // Import motion from framer-motion
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -131,20 +130,6 @@ function MessageBubble({ message, isGrouped }) {
           <button onClick={() => navigator.clipboard.writeText(message.content)} className="text-xs bg-gray-800 p-1 rounded">Copy</button>
         </div>
       )}
-    </div>
-  );
-}
-
-function LoadingMessageBubble() {
-  return (
-    <div className="flex justify-start mb-4">
-      <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl rounded-2xl p-4 bg-gradient-to-r from-gray-600 to-gray-600 text-white shadow-lg">
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></div>
-          <div className="w-3 h-3 rounded-full bg-blue-500 animate-pulse delay-75"></div>
-          <div className="w-3 h-3 rounded-full bg-blue-500 animate-pulse delay-150"></div>
-        </div>
-      </div>
     </div>
   );
 }

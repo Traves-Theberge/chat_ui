@@ -13,6 +13,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
   // State to manage feedback messages
   const [feedback, setFeedback] = useState('');
 
+  // Function to handle form submission
   const onSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
     setFeedback(''); // Clear any existing feedback messages
@@ -32,22 +33,26 @@ export default function AuthForm({ isSignup, handleSubmit }) {
     }
   };
 
+  // Animation variants for input fields
   const inputVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 20 } }
   };
 
+  // Animation variants for the submit button
   const buttonVariants = {
     hover: { scale: 1.05 },
     tap: { scale: 0.95 }
   };
 
+  // Animation variants for the form
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
     exit: { opacity: 0, y: 50, transition: { duration: 0.5 } }
   };
 
+  // JSX for the AuthForm component
   return (
     <motion.div
       variants={formVariants}

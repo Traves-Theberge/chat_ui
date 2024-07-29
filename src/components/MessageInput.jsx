@@ -1,17 +1,21 @@
 "use client"; // Indicates that this file is a client-side module
 
+// Import necessary hooks and components from React and other libraries
 import { useState, useRef, useEffect, useCallback } from 'react'; // Import the useState, useRef, useEffect, and useCallback hooks from React
 import debounce from 'lodash/debounce'; // Import the debounce function from Lodash
 import EmojiPicker from 'emoji-picker-react'; // Import the EmojiPicker component
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence from Framer Motion
 
 // Define the MessageInput component
 export default function MessageInput({ onSendMessage }) {
-  const [message, setMessage] = useState(''); // State to manage the input message
+  // State to manage the input message
+  const [message, setMessage] = useState('');
+  // State to manage the visibility of the emoji picker
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  // Ref to the textarea element for dynamic height adjustment
   const textareaRef = useRef(null);
 
-  // Debounced function to send the message
+  // Debounced function to send the message with a delay to prevent rapid-fire messages
   const debouncedSendMessage = useCallback(
     debounce((msg) => {
       onSendMessage(msg);
@@ -28,6 +32,7 @@ export default function MessageInput({ onSendMessage }) {
     }
   };
 
+  // Function to handle key down events on the textarea
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -35,6 +40,7 @@ export default function MessageInput({ onSendMessage }) {
     }
   };
 
+  // Effect to dynamically adjust the height of the textarea based on its content
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -42,10 +48,12 @@ export default function MessageInput({ onSendMessage }) {
     }
   }, [message]);
 
+  // Function to handle emoji selection from the emoji picker
   const handleEmojiClick = (emojiObject) => {
     setMessage(prevMessage => prevMessage + emojiObject.emoji);
   };
 
+  // JSX for the MessageInput component
   return (
     <motion.form
       onSubmit={handleSubmit}

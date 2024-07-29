@@ -1,5 +1,7 @@
+// This is the home page component
 "use client";
 
+// Import necessary hooks and components
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -7,12 +9,18 @@ import AuthModal from '@/components/AuthModal';
 import useAuth from '@/hooks/useAuth';
 import supabase from '@/utils/supabaseClient';
 
+// Define the home page component
 export default function HomePage() {
+  // State to manage the visibility of the login modal
   const [isLoginVisible, setIsLoginVisible] = useState(false);
+  // State to manage the visibility of the signup modal
   const [isSignupVisible, setIsSignupVisible] = useState(false);
+  // Router instance from Next.js
   const router = useRouter();
+  // Auth hook instance
   const { session, loading } = useAuth();
 
+  // Effect to redirect to the chat page if the user is already logged in
   useEffect(() => {
     if (!loading) {
       if (session) {
@@ -21,15 +29,18 @@ export default function HomePage() {
     }
   }, [session, loading, router]);
 
+  // Render a loading message if the auth hook is still loading
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // Function to close the modals
   const closeModals = () => {
     setIsLoginVisible(false);
     setIsSignupVisible(false);
   };
 
+  // Function to handle the login process
   const handleSuccess = async (email, password) => {
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -46,6 +57,7 @@ export default function HomePage() {
     }
   };
 
+  // Render the home page
   return (
     <motion.div
       initial={{ opacity: 0 }}

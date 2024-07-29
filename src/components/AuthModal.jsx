@@ -1,11 +1,14 @@
-"use client"; // Indicates that this file is a client-side module
+"use client"; 
 
+// Import necessary hooks and components from React and Framer Motion
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import AuthForm from './AuthForm'; // Import the AuthForm component
+import AuthForm from './AuthForm'; 
+
 
 // Define the AuthModal component
 export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }) {
+  // UseEffect hook to manage the body overflow property based on modal visibility
   useEffect(() => {
     if (isVisible) {
       document.body.style.overflow = 'hidden';
@@ -17,12 +20,14 @@ export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }
     };
   }, [isVisible]);
 
+  // Define animation variants for the modal
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: 'easeOut' } },
     exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3, ease: 'easeIn' } }
   };
 
+  // Return the modal component
   return (
     <AnimatePresence>
       {isVisible && (
