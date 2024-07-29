@@ -2,6 +2,7 @@
 
 // Import necessary hooks and components
 import { useState, useEffect, useCallback } from 'react';
+import { debounce } from 'lodash';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import ChatHeader from '@/components/ChatHeader.jsx';
@@ -9,40 +10,61 @@ import ChatMessages from '@/components/ChatMessages.jsx';
 import MessageInput from '@/components/MessageInput.jsx';
 import supabase from '@/utils/supabaseClient.jsx';
 import initializeModels from '@/utils/modelClients.jsx';
+import useChatStore from '@/store/chatStore';
+import useAuth from '@/hooks/useAuth';
+import { toast } from 'react-toastify'; // Import toast function from react-toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import react-toastify CSS
 
 export default function ChatPage() {
-  // State to manage the current chat session
-  const [currentChat, setCurrentChat] = useState(null);
-  // State to manage the list of messages
-  const [messages, setMessages] = useState([]);
   // State to manage the selected AI model
   const [model, setModel] = useState('gpt-3.5-turbo');
   // State to manage the loading status
   const [isLoading, setIsLoading] = useState(true);
+  // State to manage AI response loading
+  const [isAiResponding, setIsAiResponding] = useState(false);
   // Router instance from Next.js
   const router = useRouter();
+  // Chat store instance
+  const { currentChat, setCurrentChat, messages, fetchMessages, fetchChats, sendMessage } = useChatStore(state => ({
+    currentChat: state.currentChat,
+    setCurrentChat: state.setCurrentChat,
+    messages: state.messages,
+    fetchMessages: state.fetchMessages,
+    fetchChats: state.fetchChats,
+    sendMessage: state.sendMessage
+  }));
+  const { session, loading } = useAuth();
+
+  const debouncedFetchMessages = useCallback(
+    debounce((chatId) => {
+      if (chatId) {
+        fetchMessages(chatId).catch(error => {
+          console.error('Error loading messages:', error);
+          toast.error('Failed to load messages. Please try again.');
+        });
+      }
+    }, 300),
+    [fetchMessages]
+  );
+
+  // Effect to fetch messages when the current chat changes
+  useEffect(() => {
+    debouncedFetchMessages(currentChat);
+  }, [currentChat, debouncedFetchMessages]);
 
   // Function to handle sending a message
   const handleSendMessage = useCallback(async (message) => {
     if (!currentChat) return;
 
-    // Create a new message object
-    const newMessage = { 
-      content: message, 
-      sender: 'user', 
+    const userMessage = {
+      content: message,
+      sender: 'user',
       session_id: currentChat,
       created_at: new Date().toISOString()
     };
-    // Insert the new message into the database
-    const { data, error } = await supabase.from('conversations').insert(newMessage).select();
-    
-    if (error) {
-      console.error('Error inserting message:', error);
-      return;
-    }
 
-    // Update the messages state with the new message
-    setMessages(prevMessages => [...prevMessages, data[0]]);
+    // Add the user message to the store
+    sendMessage(userMessage);
 
     // Generate AI response
     const models = await initializeModels();
@@ -53,9 +75,10 @@ export default function ChatPage() {
       aiModel = models.mistral;
     }
 
+    setIsAiResponding(true);
     try {
       // Format the messages for the AI model
-      const formattedMessages = messages.map(m => ({
+      const formattedMessages = [...messages, userMessage].map(m => ({
         role: m.sender === 'user' ? 'user' : 'assistant',
         content: m.content
       }));
@@ -66,6 +89,10 @@ export default function ChatPage() {
         { role: 'user', content: message }
       ], model);
 
+      if (typeof aiResponse !== 'string') {
+        throw new Error('Invalid AI response format');
+      }
+
       // Create a new AI message object
       const aiMessage = { 
         content: aiResponse, 
@@ -73,78 +100,34 @@ export default function ChatPage() {
         session_id: currentChat,
         created_at: new Date().toISOString()
       };
-      // Insert the AI message into the database
-      const { data: aiData, error: aiError } = await supabase.from('conversations').insert(aiMessage).select();
-      
-      if (aiError) {
-        console.error('Error inserting AI message:', aiError);
-        return;
-      }
 
-      // Update the messages state with the AI message
-      setMessages(prevMessages => [...prevMessages, aiData[0]]);
+      // Add the AI message to the store
+      sendMessage(aiMessage);
+
     } catch (error) {
       console.error('Error generating AI response:', error);
+      toast.error('Error generating response: ' + error.message);
+    } finally {
+      setIsAiResponding(false);
     }
-  }, [currentChat, model, messages]);
-
-  // Effect to fetch messages when the current chat changes
-  useEffect(() => {
-    if (currentChat) {
-      fetchMessages(currentChat);
-    }
-  }, [currentChat]);
+  }, [currentChat, model, messages, sendMessage, setIsAiResponding]);
 
   // Effect to check authentication status on component mount
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+    if (!loading) {
       if (!session) {
         router.push('/login');
       } else {
         setIsLoading(false);
+        // We don't need to fetch chats here, as they will be added individually
       }
-    };
-
-    checkAuth();
-
-    // Listen for authentication state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT') {
-        router.push('/login');
-      } else if (event === 'SIGNED_IN' && session) {
-        setIsLoading(false);
-      }
-    });
-
-    // Cleanup the listener on component unmount
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [router]);
-
-  // Show loading screen if the app is still loading
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // Function to fetch messages for a given chat session
-  const fetchMessages = async (chatId) => {
-    const { data, error } = await supabase
-      .from('conversations')
-      .select('*')
-      .eq('session_id', chatId)
-      .order('created_at', { ascending: true });
-    if (error) {
-      console.error('Error fetching messages:', error);
-    } else {
-      setMessages(data || []);
     }
-  };
+  }, [session, loading, router]);
 
   const handleChatDelete = (deletedChatId) => {
     if (currentChat === deletedChatId) {
-      setMessages([]);
+      setCurrentChat(null);
+      useChatStore.getState().clearMessages();
     }
   };
 
@@ -156,11 +139,11 @@ export default function ChatPage() {
         currentChat={currentChat} 
         onChatDelete={handleChatDelete}
       />
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow bg-gray-800">
         {/* Chat header component */}
         <ChatHeader currentChat={currentChat} model={model} setModel={setModel} />
         {/* Chat messages component */}
-        <ChatMessages messages={messages} isLoading={isLoading} />
+        <ChatMessages messages={messages} isLoading={isLoading} isAiResponding={isAiResponding} />
         {/* Message input component */}
         <MessageInput onSendMessage={handleSendMessage} model={model} />
       </div>

@@ -20,49 +20,45 @@ A real-time chat interface enabling users to communicate with multiple AI models
 - [Environment Variables](#environment-variables)
 - [Contributing](#contributing)
 - [License](#license)
+- [Key Dependencies](#key-dependencies)
 
 ## Project Structure
 ```
 src/
-├── app/
-│   ├── chat/
-│   │   ├── ChatComponent.jsx
-│   │   ├── ModalComponent.jsx
-│   │   └── page.jsx
-│   ├── login/
-│   │   └── page.jsx
-│   ├── signup/
-│   │   └── page.jsx
-│   ├── layout.jsx
-│   └── page.jsx
-├── components/
-│   ├── AuthForm.jsx
-│   ├── AuthModal.jsx
-│   ├── ChatHeader.jsx
-│   ├── ChatMessages.jsx
-│   ├── ChatSessions.jsx
-│   ├── MessageInput.jsx
-│   ├── ModelSelector.jsx
-│   └── Sidebar.jsx
-├── hooks/
-│   └── useSocket.jsx
-├── middleware/
-│   └── auth.jsx
-├── pages/
-│   ├── api/
-│   │   ├── mistral.jsx
-│   │   └── openai.jsx
-│   ├── _app.jsx
-│   └── _document.jsx
-├── store/
-│   └── chatStore.jsx
-├── styles/
-│   └── globals.css
-└── utils/
-    ├── api.jsx
-    ├── modelClients.jsx
-    ├── socket.jsx
-    └── supabaseClient.jsx
+┣ app/
+┃ ┣ chat/
+┃ ┃ ┗ page.jsx
+┃ ┣ login/
+┃ ┃ ┗ page.jsx
+┃ ┣ signup/
+┃ ┃ ┗ page.jsx
+┃ ┣ layout.jsx
+┃ ┗ page.jsx
+┣ components/
+┃ ┣ AuthForm.jsx
+┃ ┣ AuthModal.jsx
+┃ ┣ ChatHeader.jsx
+┃ ┣ ChatMessages.jsx
+┃ ┣ MessageInput.jsx
+┃ ┣ ModelSelector.jsx
+┃ ┗ Sidebar.jsx
+┣ hooks/
+┃ ┗ useAuth.jsx
+┣ middleware/
+┃ ┗ auth.jsx
+┣ pages/
+┃ ┣ api/
+┃ ┃ ┣ mistral.jsx
+┃ ┃ ┗ openai.jsx
+┃ ┣ _app.jsx
+┃ ┗ _document.jsx
+┣ store/
+┃ ┗ chatStore.jsx
+┣ styles/
+┃ ┗ globals.css
+┗ utils/
+  ┣ modelClients.jsx
+  ┗ supabaseClient.jsx
 .env.local
 .eslintrc.json
 .gitignore
@@ -80,8 +76,8 @@ tailwind.config.js
 ## Features
 
 - User authentication (signup, login, and logout) with Supabase
-- Real-time messaging with Supabase and Socket.io
-- Chat session management (create, read, update, and delete chats)
+- Real-time messaging with Supabase
+- Chat session management (create, read, and delete chats)
 - Model selection for different AI interactions
 - Support for multiple AI models:
   - OpenAI models: GPT-4o, GPT-4o-mini, GPT-4-turbo, GPT-3.5-turbo-0125, GPT-3.5-turbo (default)
@@ -91,15 +87,14 @@ tailwind.config.js
 
 ## Tech Stack
 
-- **Next.js**: A React framework for server-side rendering and routing.
-- **React**: A JavaScript library for building user interfaces.
-- **Supabase**: An open-source Firebase alternative for authentication and database.
-- **Tailwind CSS**: A utility-first CSS framework.
-- **OpenAI API**: Provides GPT model integration.
-- **Mistral AI**: Offers alternative AI models for chat completions.
-- **Socket.io**: Enables real-time bidirectional event-based communication.
-- **SWR**: A React Hooks library for data fetching.
-- **Zustand**: A state management solution.
+- **Next.js**: A React framework for server-side rendering and routing
+- **React**: A JavaScript library for building user interfaces
+- **Supabase**: An open-source Firebase alternative for authentication and database
+- **Tailwind CSS**: A utility-first CSS framework
+- **OpenAI API**: Provides GPT model integration
+- **Mistral AI**: Offers alternative AI models for chat completions
+- **Framer Motion**: A production-ready motion library for React
+- **Zustand**: A small, fast, and scalable state management solution
 
 ## Installation
 
@@ -167,6 +162,29 @@ Please ensure your code adheres to the project's coding conventions and standard
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+## Key Dependencies
+
+This project relies on several key dependencies to provide its functionality:
+
+- **React**: ^18.3.1
+- **Next.js**: ^14.2.5
+- **Supabase**: ^2.44.4
+- **OpenAI**: ^4.53.2
+- **Mistral AI**: ^0.5.0
+- **Framer Motion**: ^11.3.19
+- **React Markdown**: ^9.0.1
+- **React Syntax Highlighter**: ^15.5.0
+- **React Toastify**: ^10.0.5
+- **SWR**: ^2.2.5
+- **Zustand**: ^4.5.4
+- **Lodash**: ^4.17.21
+- **Emoji Picker React**: ^4.11.1
+- **Font Awesome**: ^6.6.0
+
+These dependencies provide essential functionality for state management, UI animations, markdown rendering, syntax highlighting, notifications, data fetching, and integration with AI services.
+
+For a complete list of dependencies and their versions, please refer to the `package.json` file in the project root.
 
 ## Disclaimer
 

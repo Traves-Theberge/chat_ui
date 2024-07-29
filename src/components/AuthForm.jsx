@@ -63,7 +63,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
       >
         {isSignup ? 'Sign Up' : 'Login'}
       </motion.h2>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="space-y-6 bg-gray-800 p-8 rounded-lg">
         <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-4">
           <label htmlFor="email" className="block mb-2 text-gray-300">Email</label>
           <input
@@ -72,7 +72,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full p-3 rounded-lg bg-gray-800 bg-opacity-50 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+            className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
         </motion.div>
         <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-6">
@@ -83,7 +83,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-3 rounded-lg bg-gray-800 bg-opacity-50 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+            className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
         </motion.div>
         <motion.button
@@ -91,7 +91,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
           variants={buttonVariants}
           whileHover="hover"
           whileTap="tap"
-          className="w-full p-3 bg-pink-600 text-white rounded-lg font-semibold transition duration-300 ease-in-out transform hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
+          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           {isSignup ? 'Sign Up' : 'Login'}
         </motion.button>

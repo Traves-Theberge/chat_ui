@@ -14,10 +14,10 @@ export const metadata = {
 // Root layout component
 export default function RootLayout({ children }) {
   return (
-    <html lang="en"> {/* Set the language of the document */}
-      <body className="min-h-screen bg-gray-900 text-white"> {/* Set the body styles */}
-        {children} {/* Render child components */}
-        <ToastContainer position="bottom-right" /> {/* Toast notifications container */}
+    <html lang="en">
+      <body className="min-h-screen bg-gray-900 text-white">
+        {children}
+        <ToastContainer position="bottom-right" theme="dark" toastClassName="bg-gray-800 text-white" />
       </body>
     </html>
   );

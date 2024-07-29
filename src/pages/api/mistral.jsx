@@ -4,21 +4,25 @@ const mistral = new MistralClient(process.env.MISTRAL_API_KEY); // Initialize Mi
 
 // Define the API route handler
 export default async function handler(req, res) {
-  if (req.method === 'POST') { // Check if the request method is POST
-    try {
-      const { messages, model } = req.body; // Destructure messages and model from the request body
-      console.log(`Using Mistral model: ${model}`); // Log the model being used
-      const completion = await mistral.chat({
-        model: model, // Specify the model
-        messages // Pass the messages
-      });
-      res.status(200).json({ content: completion.choices[0].message.content.trim() }); // Respond with the trimmed content of the first choice
-    } catch (error) {
-      console.error('Mistral API error:', error); // Log any errors
-      res.status(500).json({ error: error.message }); // Respond with a 500 status and the error message
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const { messages, model } = req.body;
+
+    if (!messages || !Array.isArray(messages) || !model) {
+      return res.status(400).json({ error: 'Invalid request body' });
     }
-  } else {
-    res.setHeader('Allow', ['POST']); // Set the Allow header to indicate that only POST is allowed
-    res.status(405).end(`Method ${req.method} Not Allowed`); // Respond with a 405 status and a message indicating the method is not allowed
+
+    const completion = await mistral.chat({
+      model: model,
+      messages: messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
+    });
+
+    res.status(200).json({ content: completion.choices[0].message.content.trim() });
+  } catch (error) {
+    console.error('Mistral API error:', error);
+    res.status(500).json({ error: 'An error occurred while processing your request' });
   }
 }

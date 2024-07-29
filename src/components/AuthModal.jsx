@@ -30,17 +30,17 @@ export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-md flex items-center justify-center z-50 p-6"
+          className={`fixed inset-0 bg-black bg-opacity-70 backdrop-blur-md flex items-center justify-center z-50 p-6`}
         >
           <motion.div
             variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl p-8 w-full max-w-md relative overflow-hidden"
+            className={`bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md relative overflow-hidden`}
           >
             <motion.button 
-              className="absolute top-6 right-6 text-gray-300 hover:text-white transition-colors z-10 p-4 rounded-full bg-gray-700 bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-white"
+              className={`absolute top-6 right-6 text-gray-300 hover:text-white transition-colors z-10 p-4 rounded-full bg-gray-700 bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-white`}
               onClick={closeModal}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.8 }}

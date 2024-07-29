@@ -5,9 +5,9 @@ import ModelSelector from '@/components/ModelSelector'; // Import the ModelSelec
 // Define the ChatHeader component
 export default function ChatHeader({ currentChat, model, setModel }) {
   return (
-    <div className="bg-gray-800 p-4 shadow-md h-16 flex items-center"> {/* Container div with styles */}
+    <div className="bg-gray-900 text-white p-4 shadow-md h-16 flex items-center"> {/* Container div with styles */}
       <div className="flex items-center justify-between w-full"> {/* Inner div with flexbox styles */}
-        <h2 className="text-xl font-semibold text-white">Chat Session</h2> {/* Header text */}
+        <h2 className="text-xl font-semibold">Chat Session</h2> {/* Header text */}
         <ModelSelector model={model} setModel={setModel} /> {/* ModelSelector component */}
       </div>
     </div>

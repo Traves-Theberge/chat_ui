@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'; // Import the useState, useRef, useEffect, and useCallback hooks from React
 import debounce from 'lodash/debounce'; // Import the debounce function from Lodash
 import EmojiPicker from 'emoji-picker-react'; // Import the EmojiPicker component
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Define the MessageInput component
 export default function MessageInput({ onSendMessage }) {
@@ -14,8 +15,8 @@ export default function MessageInput({ onSendMessage }) {
   const debouncedSendMessage = useCallback(
     debounce((msg) => {
       onSendMessage(msg);
-    }, 300), // Debounce for 300ms
-    [onSendMessage] // Dependency on the onSendMessage function
+    }, 300),
+    [onSendMessage]
   );
 
   // Function to handle form submission
@@ -24,6 +25,13 @@ export default function MessageInput({ onSendMessage }) {
     if (message.trim()) { // Check if the message is not empty
       debouncedSendMessage(message); // Call the debounced function with the message
       setMessage(''); // Clear the input field
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
     }
   };
 
@@ -39,38 +47,59 @@ export default function MessageInput({ onSendMessage }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-gray-800 border-t border-gray-700"> {/* Form element with styles */}
-      <div className="relative flex items-end space-x-2"> {/* Container div with flexbox styles */}
-        <button
+    <motion.form
+      onSubmit={handleSubmit}
+      className="p-8 border-t border-gray-700"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="relative flex items-center space-x-2">
+        <motion.button
           type="button"
           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
           className="text-gray-400 hover:text-white transition-colors"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
           😊
-        </button>
-        {showEmojiPicker && (
-          <div className="absolute bottom-full mb-2">
-            <EmojiPicker onEmojiClick={handleEmojiClick} />
-          </div>
-        )}
-        <textarea
+        </motion.button>
+        <AnimatePresence>
+          {showEmojiPicker && (
+            <motion.div
+              className="absolute bottom-full mb-2"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+            >
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <motion.textarea
           ref={textareaRef}
-          type="text" // Input type is text
-          value={message} // Bind the input value to the message state
-          onChange={(e) => setMessage(e.target.value)} // Update the message state on input change
-          className="flex-grow p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none" // Input element styles
-          placeholder="Type your message..." // Placeholder text for the input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="flex-grow p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none"
+          placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
           rows={1}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
         />
-        <button
-          type="submit" // Button type is submit
-          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" // Button element styles
+        <motion.button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> {/* SVG icon for the button */}
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /> {/* Path for the SVG icon */}
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
           </svg>
-        </button>
+        </motion.button>
       </div>
-    </form>
+    </motion.form>
   );
 }
