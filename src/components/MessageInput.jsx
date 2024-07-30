@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile, faPaperclip, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 // Define the MessageInput component
-export default function MessageInput({ onSendMessage, isDarkMode }) {
+export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding }) {
   // State to manage the input message
   const [message, setMessage] = useState('');
   // State to manage the visibility of the emoji picker
@@ -205,13 +205,24 @@ export default function MessageInput({ onSendMessage, isDarkMode }) {
         />
         <motion.button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          className={`bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            isAiResponding ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          whileHover={{ scale: isAiResponding ? 1 : 1.05 }}
+          whileTap={{ scale: isAiResponding ? 1 : 0.95 }}
+          disabled={isAiResponding}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-          </svg>
+          {isAiResponding ? (
+            <motion.div
+              className="w-6 h-6 border-t-2 border-b-2 border-white rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            />
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          )}
         </motion.button>
       </div>
     </motion.form>
