@@ -50,11 +50,12 @@ const useChatStore = create((set, get) => ({
   // Function to send a new message
   sendMessage: async (message) => {
     const { messages, currentChat } = get(); // Get the current state
-    // Prepare the new message with the current chat session ID and timestamp
+    // Prepare the new message with the current chat session ID, timestamp, and file information
     const newMessage = {
       ...message,
       session_id: currentChat,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      file: message.file // Add this line
     };
     // Add the new message to the state
     set({ messages: [...messages, newMessage] });

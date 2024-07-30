@@ -72,11 +72,12 @@ function MessageGroup({ messages }) {
 function MessageBubble({ message, isGrouped }) {
   const [showActions, setShowActions] = useState(false);
 
-  // Pre-process the message content
   const processedContent = useMemo(() => {
-    // Add any pre-processing logic here
+    if (message.file) {
+      return `File: ${message.file.filename}\n\n${message.content}`;
+    }
     return message.content;
-  }, [message.content]);
+  }, [message.content, message.file]);
 
   return (
     <div
@@ -109,7 +110,6 @@ function MessageBubble({ message, isGrouped }) {
               </code>
             );
           },
-          // Add custom renderers for other elements if needed
           p: ({ children }) => <p className="mb-2">{children}</p>,
           ul: ({ children }) => <ul className="list-disc ml-4 mb-2">{children}</ul>,
           ol: ({ children }) => <ol className="list-decimal ml-4 mb-2">{children}</ol>,

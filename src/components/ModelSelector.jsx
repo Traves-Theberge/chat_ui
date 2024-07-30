@@ -5,26 +5,18 @@ export default function ModelSelector({ model, setModel }) {
   // List of available models
   const models = {
     OpenAI: [
-      'gpt-4o',
-      'gpt-4o-mini',
-      'gpt-4-turbo',
-      'gpt-3.5-turbo-0125',
-      'gpt-3.5-turbo'
+      'gpt-4o', // 128,000 tokens	Up to Oct 2023
+      'gpt-4o-mini', // 128,000 tokens	Up to Oct 2023
+      'gpt-4-turbo', // 128,000 tokens	Up to Dec 2023
+      'gpt-3.5-turbo' // 16,385 tokens	Up to Sep 2021
     ],
     Mistral: [
-      'mistral-tiny',
-      'mistral-small',
-      'mistral-medium',
-      'open-mistral-7b',
-      'open-mixtral-8x7b',
-      'open-mixtral-8x22b',
-      'mistral-small-2402',
-      'mistral-large-2402',
-      'mistral-large-2407',
-      'mistral-embed',
-      'codestral-2405',
-      'codestral-mamba-2407',
-      'open-mistral-nemo'
+      'mistral-tiny-latest', // 128,000 tokens
+      'mistral-small-latest', // 128,000 tokens
+      'mistral-medium-latest', // 128,000 tokens
+      'mistral-large-latest', // 128,000 tokens
+      'open-mistral-nemo', // 128,000 tokens
+      'codestral-latest', // 32,000 tokens
     ]
   };
 
