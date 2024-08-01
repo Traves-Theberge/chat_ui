@@ -9,6 +9,16 @@ This chat application is built on Next.js and incorporates AI capabilities. It l
 
 This application is still in development and may contain bugs or incomplete features. Please be aware that using it in a production environment is not recommended at this stage. We appreciate any feedback or bug reports to help improve the application.
 
+## Homepage w/ Login and signup
+![Homepage](https://github.com/user-attachments/assets/d84078a7-31d6-4b73-b4ff-c84bbcb62442)
+
+##Chat sessions
+
+![ChatSession](https://github.com/user-attachments/assets/f6239241-9dfa-4c68-8b00-1a67bc16d777)
+
+![ChatSessionUploadCollapsed](https://github.com/user-attachments/assets/2fb51f38-74ec-460f-9d48-abcda6381a50)
+
+
 ## Table of Contents
 
 - [Disclaimer](#disclaimer)
