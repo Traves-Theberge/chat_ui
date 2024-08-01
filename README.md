@@ -14,7 +14,8 @@ This application is still in development and may contain bugs or incomplete feat
 
 ##Chat sessions
 
-![ChatSession](https://github.com/user-attachments/assets/f6239241-9dfa-4c68-8b00-1a67bc16d777)
+![ChatSession](https://github.com/user-attachments/assets/18d10c5d-edcf-48ca-a91f-22315de7397c)
+
 
 ![ChatSessionUploadCollapsed](https://github.com/user-attachments/assets/2fb51f38-74ec-460f-9d48-abcda6381a50)
 
