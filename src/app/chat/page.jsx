@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { debounce } from 'lodash';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/components/sidebar/SidebarContainer';
 import ChatHeader from '@/components/ChatHeader.jsx';
 import ChatMessages from '@/components/ChatMessages.jsx';
 import MessageInput from '@/components/MessageInput.jsx';
@@ -16,22 +16,22 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function ChatPage() {
   // State to manage the selected AI model
-  const [model, setModel] = useState('gpt-3.5-turbo');
+  const { currentChat, setCurrentChat, messages, fetchMessages, fetchChats, sendMessage, model, setModel } = useChatStore(state => ({
+    currentChat: state.currentChat,
+    setCurrentChat: state.setCurrentChat,
+    messages: state.messages,
+    fetchMessages: state.fetchMessages,
+    fetchChats: state.fetchChats,
+    sendMessage: state.sendMessage,
+    model: state.model,
+    setModel: state.setModel
+  }));
   // State to manage the loading status
   const [isLoading, setIsLoading] = useState(true);
   // State to manage AI response loading
   const [isAiResponding, setIsAiResponding] = useState(false);
   // Router instance from Next.js
   const router = useRouter();
-  // Chat store instance
-  const { currentChat, setCurrentChat, messages, fetchMessages, fetchChats, sendMessage } = useChatStore(state => ({
-    currentChat: state.currentChat,
-    setCurrentChat: state.setCurrentChat,
-    messages: state.messages,
-    fetchMessages: state.fetchMessages,
-    fetchChats: state.fetchChats,
-    sendMessage: state.sendMessage
-  }));
   const { session, loading } = useAuth();
 
   const debouncedFetchMessages = useCallback(

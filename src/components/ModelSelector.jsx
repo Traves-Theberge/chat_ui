@@ -1,7 +1,11 @@
 "use client"; // Indicates that this file is a client-side module
 
 // Define the ModelSelector component
-export default function ModelSelector({ model, setModel }) {
+import useChatStore from '@/store/chatStore';
+
+export default function ModelSelector() {
+  const { model, setModel } = useChatStore(state => ({ model: state.model, setModel: state.setModel }));
+
   // List of available models
   const models = {
     OpenAI: [

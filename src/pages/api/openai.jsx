@@ -10,8 +10,9 @@ export default async function handler(req, res) {
 
   try {
     const { messages, model } = req.body;
+    console.log(`POST /api/openai/${model}`); // Log the model name
     const completion = await openai.chat.completions.create({
-      model: model || 'gpt-3.5-turbo',
+      model: model,
       messages: messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
     });
     res.status(200).json({ content: completion.choices[0].message.content.trim() });

@@ -58,3 +58,21 @@ body {
     transform: translateY(-5px);
   }
 }
+
+.sidebar-button {
+  height: 40px; /* Adjust this value as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.custom-toast {
+  background-color: #3b82f6 !important; /* blue-500 */
+  color: white !important;
+}
+
+.custom-toast-progress-bar {
+  background-color: #1d4ed8 !important; /* blue-700 */
+}

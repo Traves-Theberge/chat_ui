@@ -10,6 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const { messages, model } = req.body;
+    console.log(`POST /api/mistral/${model}`); // Log the model name
 
     if (!messages || !Array.isArray(messages) || !model) {
       return res.status(400).json({ error: 'Invalid request body' });

@@ -7,12 +7,12 @@ const useChatStore = create((set, get) => ({
   currentChat: null, // The current chat session ID
   messages: [], // Array to hold chat messages
   chats: [], // Array to hold chat sessions
-  model: 'gpt-3.5-turbo', // The model for chat interactions
+  model: 'gpt-4o-mini', // The model for chat interactions
   
   // Action to set the current chat session ID
   setCurrentChat: (chatId) => set({ currentChat: chatId }),
   // Action to set the model for chat interactions
-  setModel: (model) => set({ model }),
+  setModel: (model) => set({ model }), // Updated to set the model
   
   // Function to fetch messages for a given chat session
   fetchMessages: async (chatId) => {
@@ -86,6 +86,37 @@ const useChatStore = create((set, get) => ({
     // If it already exists, return the current state
     return state;
   }),
+  
+  // Function to create a new chat session
+  createChat: async (chatName) => {
+    try {
+      // Check if a chat with the same name already exists
+      const { data: existingChats, error: fetchError } = await supabase
+        .from('chat_sessions')
+        .select('id')
+        .eq('session_name', chatName)
+        .limit(1);
+
+      if (fetchError) throw fetchError;
+
+      if (existingChats && existingChats.length > 0) {
+        throw new Error('A chat with this name already exists');
+      }
+
+      const { data, error } = await supabase
+        .from('chat_sessions')
+        .insert({ session_name: chatName })
+        .select()
+        .single();
+
+      if (error) throw error;
+      set((state) => ({ chats: [data, ...state.chats] }));
+      return data;
+    } catch (error) {
+      console.error('Error creating chat:', error);
+      throw error;
+    }
+  },
 }));
 
 export default useChatStore; // Export the useChatStore hook

@@ -17,7 +17,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="min-h-screen bg-gray-900 text-white">
         {children}
-        <ToastContainer position="bottom-right" theme="dark" toastClassName="bg-gray-800 text-white" />
+        <ToastContainer 
+          position="top-center" 
+          toastClassName="custom-toast"
+          progressClassName="custom-toast-progress-bar"
+        />
       </body>
     </html>
   );
