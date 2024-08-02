@@ -12,7 +12,7 @@ This application is still in development and may contain bugs or incomplete feat
 ## Homepage w/ Login and signup
 ![Homepage](https://github.com/user-attachments/assets/d84078a7-31d6-4b73-b4ff-c84bbcb62442)
 
-##Chat sessions
+## Chat sessions
 
 ![ChatSession](https://github.com/user-attachments/assets/18d10c5d-edcf-48ca-a91f-22315de7397c)
 
