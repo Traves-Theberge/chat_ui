@@ -2,7 +2,7 @@
 
 This chat application is built on Next.js and incorporates AI capabilities. It leverages Supabase for user authentication and data management, while OpenAI and Mistral AI are utilized for response generation and can be selected interchangeably in the chat.
 
-🔑 ** Just Add API Keys for Open AI, Mistral & Supabase**
+🔑 ** Just Add API Keys for Open AI, Mistral & Set Up Supabase**
 
 
 ## Disclaimer
