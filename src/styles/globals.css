@@ -25,6 +25,14 @@ body {
 .my-custom-modal {
   max-width: 90%;
   width: 800px;
+  transition: opacity 0.15s linear;
+  transform: scale(0.95);
+  transition: transform 0.3s ease-out, opacity 0.15s linear;
+}
+
+.my-custom-modal.show {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .typing-indicator {
@@ -75,4 +83,34 @@ body {
 
 .custom-toast-progress-bar {
   background-color: #1d4ed8 !important; /* blue-700 */
+}
+
+.button {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 60px;  /* Set a fixed width */
+  height: 60px; /* Set the same value as width to make it square */
+  border-radius: 50%; /* This will make the square into a circle */
+  padding: 0; /* Remove padding to ensure circular shape */
+  line-height: 60px; /* Center text vertically */
+}
+
+.button5 {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border-radius: 50%;
+  line-height: 60px; /* Center text vertically */
+}
+
+.modal-top-layer {
+  position: fixed;
+  z-index: 9999;
 }

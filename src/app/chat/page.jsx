@@ -43,7 +43,7 @@ export default function ChatPage() {
         });
       }
     }, 300),
-    [fetchMessages]
+    [fetchMessages, toast]
   );
 
   // Effect to fetch messages when the current chat changes

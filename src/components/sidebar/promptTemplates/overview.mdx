@@ -1,0 +1,169 @@
+# Prompt Templates Feature: How to Use
+
+## Introduction
+
+Prompt templates allow you to create, manage, and apply pre-defined text structures to your messages. This feature enhances your experience by providing quick access to commonly used prompts and allowing for customization through placeholders.
+
+## How to Access Prompt Templates
+
+1. Open the chat interface.
+2. Look for the "Prompt Templates" button in the sidebar.
+3. Click the button to open the Prompt Templates modal.
+
+## Using Prompt Templates
+
+### Applying a Template
+
+1. In the Prompt Templates modal, browse the list of available templates.
+2. Click on a template to select it.
+3. Click the "Select Template" button.
+4. If the template contains placeholders, a new modal will open:
+   - Fill in the required information for each placeholder.
+   - For file placeholders, click "Upload" to select a text file.
+   - Use the "Show Preview" button to see how your filled template will look.
+   - Click "Apply" to insert the filled template into your message input.
+
+### Creating a New Template
+
+1. In the Prompt Templates modal, click the "New Template" button.
+2. Enter a descriptive name for your template in the "Template Name" field.
+3. Write the content of your template in the "Template Content" text area.
+   - Use `{{placeholder}}` syntax to define dynamic parts of your template.
+   - Example: "Explain the concept of {{concept}} in simple terms."
+4. Click "Save Template" to add your new template to the list.
+
+### Editing an Existing Template
+
+1. Find the template you want to edit in the list.
+2. Click the edit icon (pencil icon) next to the template name.
+3. Modify the name and/or content of the template as needed.
+4. Click "Save Template" to update the existing template.
+
+### Deleting a Template
+
+1. Locate the template you wish to remove in the list.
+2. Click the delete icon (trash can icon) next to the template name.
+3. Confirm the deletion when prompted.
+
+## Best Practices
+
+1. Use clear, descriptive names for your templates to easily identify their purpose.
+2. Create templates for prompts you use frequently to save time and ensure consistency.
+3. Utilize placeholders for content that may change between uses of the template.
+4. Always preview filled templates before applying them to ensure accuracy.
+5. Regularly review and update your templates to maintain their relevance and effectiveness.
+
+## Troubleshooting
+
+- If a template is not appearing in the list:
+  - Ensure it was saved correctly.
+  - Try refreshing the page or reopening the Prompt Templates modal.
+- If placeholders are not being recognized:
+  - Verify that they follow the `{{placeholder}}` syntax in the template content.
+- If the filled template is not being applied to the message input:
+  - Check that you've clicked the "Apply" button in the placeholder fill modal.
+  - If the issue persists, there might be a problem with the `onApplyTemplate` function in the PromptTemplateModal component.
+
+## Examples of Placeholders
+
+Here are some examples of how placeholders work in templates:
+
+1. Basic placeholder:
+   ```
+   Explain the concept of {{concept}} in simple terms.
+   ```
+
+2. Multiple placeholders:
+   ```
+   Compare and contrast {{topic1}} and {{topic2}} in the context of {{field}}.
+   ```
+
+3. File reference placeholder:
+   ```
+   Analyze the following code:
+   {{file_reference}}
+   ```
+   
+   When using the `{{file_reference}}` placeholder:
+   - A special "Upload" button appears next to the placeholder input field.
+   - Click the "Upload" button to select a text-based file from your computer.
+   - Supported file formats include .txt, .html, .css, .js, .json, .xml, and .md.
+   - Once uploaded, the file's name will appear in the input field.
+   - When applying the template, the file's content will replace the placeholder.
+
+   How it works in the system:
+   1. The PlaceholderFillModal component detects placeholders of type 'file'.
+   2. For file placeholders, it renders an upload button instead of a text input.
+   3. When a file is selected, the `handleFileUpload` function is called.
+   4. This function checks if the file type is supported using a predefined list of MIME types.
+   5. If supported, it uses FileReader to read the file's content as text.
+   6. The file content is stored in the component's state, associated with the placeholder.
+   7. When applying the template, the `handleApply` function replaces the placeholder with the stored file content.
+
+   For developers, the relevant code can be found in:
+
+```typescript:src/components/sidebar/promptTemplates/PlaceholderFillModal.jsx
+startLine: 34
+endLine: 63
+```
+
+```typescript:src/components/sidebar/promptTemplates/PlaceholderFillModal.jsx
+startLine: 80
+endLine: 93
+```
+
+```typescript:src/components/sidebar/promptTemplates/PlaceholderFillModal.jsx
+startLine: 129
+endLine: 147
+```
+
+4. Numbered placeholders:
+   ```
+   List {{number}} advantages of {{technology}}.
+   ```
+
+5. Placeholder for longer text:
+   ```
+   Summarize the following passage:
+   {{text_passage}}
+   ```
+
+6. Placeholder for code snippet:
+   ```
+   Debug the following {{language}} code:
+   {{code_snippet}}
+   ```
+
+These examples showcase various ways to use placeholders in templates, allowing for flexible and dynamic content generation.
+
+## Components Reference
+
+For developers and advanced users, the prompt templates feature consists of three main components:
+
+```typescript:src/components/sidebar/promptTemplates/PromptTemplateModal.jsx
+startLine: 10
+endLine: 210
+```
+
+```typescript:src/components/sidebar/promptTemplates/PlaceholderFillModal.jsx
+startLine: 9
+endLine: 180
+```
+
+```typescript:src/components/MessageInput.jsx
+startLine: 116
+endLine: 122
+```
+
+## Customization for Developers
+
+To add or modify default templates, edit the `defaultTemplates` array in:
+
+```typescript:src/utils/promptTemplates.js
+startLine: 1
+endLine: 26
+```
+
+This allows you to provide industry-specific or role-specific templates out of the box.
+
+By following this guide, you can effectively utilize the prompt templates feature to enhance your messaging experience and improve productivity.

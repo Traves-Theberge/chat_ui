@@ -2,7 +2,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Defining the SidebarHeader component
 const SidebarHeader = ({ isCollapsed, setIsCollapsed }) => {
+  // Returning the JSX for the component
   return (
     <div className="p-4 flex justify-between items-center h-16">
       {!isCollapsed && (

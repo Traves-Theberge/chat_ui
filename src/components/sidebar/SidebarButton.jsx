@@ -16,7 +16,7 @@ const SidebarButton = ({ onClick, icon, text, isCollapsed, className }) => {
       <AnimatePresence mode="wait" initial={false}>
         {!isCollapsed && (
           <motion.span
-            key={`${text}-text`}
+            key={`${text}-text-${isCollapsed}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

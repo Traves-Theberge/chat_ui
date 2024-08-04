@@ -7,6 +7,9 @@ import SidebarChatList from './SidebarChatList';
 import SidebarFooter from './SidebarFooter';
 import SidebarNewChatModal from './SidebarNewChatModal';
 import { handleDeleteChat, handleLogout } from '@/utils/sidebarHandlers';
+import PromptTemplateButton from './promptTemplates/PromptTemplateButton';
+import PromptTemplateModal from './promptTemplates/PromptTemplateModal';
+import { fillTemplatePlaceholders } from '@/utils/apiUtils';
 
 export default function Sidebar({ setCurrentChat, currentChat, onChatDelete }) {
   const { chats, fetchChats } = useChatStore((state) => ({ 
@@ -17,6 +20,7 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newChatName, setNewChatName] = useState('');
+  const [isPromptTemplateModalOpen, setIsPromptTemplateModalOpen] = useState(false);
 
   useEffect(() => {
     const loadChats = async () => {
@@ -59,6 +63,14 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete }) {
     }
   };
 
+  const handleOpenPromptTemplateModal = () => setIsPromptTemplateModalOpen(true);
+  const handleClosePromptTemplateModal = () => setIsPromptTemplateModalOpen(false);
+
+  const handleApplyTemplate = (filledTemplate) => {
+    const { setMessageInput } = useChatStore.getState();
+    setMessageInput(filledTemplate);
+  };
+
   return (
     <div className={`bg-gray-900 text-white flex flex-col transition-all duration-300 ease-in-out ${
       isCollapsed ? 'w-16' : 'w-64'
@@ -72,6 +84,9 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete }) {
         setCurrentChat={setCurrentChat}
         handleDeleteChat={(chatId) => handleDeleteChat(chatId, fetchChats, setCurrentChat, currentChat, onChatDelete)}
       />
+      <div className="mt-auto p-4">
+        <PromptTemplateButton onClick={handleOpenPromptTemplateModal} isCollapsed={isCollapsed} />
+      </div>
       <SidebarFooter 
         isCollapsed={isCollapsed}
         handleOpenNewChatModal={handleOpenNewChatModal}
@@ -83,6 +98,11 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete }) {
         newChatName={newChatName}
         setNewChatName={setNewChatName}
         handleCreateChat={handleCreateChat}
+      />
+      <PromptTemplateModal
+        isOpen={isPromptTemplateModalOpen}
+        onClose={handleClosePromptTemplateModal}
+        onApplyTemplate={handleApplyTemplate}
       />
     </div>
   );

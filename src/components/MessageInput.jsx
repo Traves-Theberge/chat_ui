@@ -7,20 +7,24 @@ import EmojiPicker, { Theme } from 'emoji-picker-react'; // Import the EmojiPick
 import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence from Framer Motion
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile, faPaperclip, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import useChatStore from '@/store/chatStore';
 
 // Define the MessageInput component
 export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding }) {
-  // State to manage the input message
-  const [message, setMessage] = useState('');
-  // State to manage the visibility of the emoji picker
+  const { messageInput, setMessageInput, applyTemplate, setApplyTemplate } = useChatStore(state => ({
+    messageInput: state.messageInput || '', // Ensure it's always a string
+    setMessageInput: state.setMessageInput,
+    applyTemplate: state.applyTemplate,
+    setApplyTemplate: state.setApplyTemplate
+  }));
   const [showPicker, setShowPicker] = useState(false);
-  // State to manage the visibility of the menu
   const [showMenu, setShowMenu] = useState(false);
-  // Ref to the textarea element for dynamic height adjustment
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
   const emojiPickerRef = useRef(null);
   const menuRef = useRef(null);
+  const [templatePreview, setTemplatePreview] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   // Debounced function to send the message with a delay to prevent rapid-fire messages
   const debouncedSendMessage = useCallback(
@@ -32,10 +36,11 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
 
   // Function to handle form submission
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    if (message.trim()) { // Check if the message is not empty
-      debouncedSendMessage(message); // Call the debounced function with the message
-      setMessage(''); // Clear the input field
+    e.preventDefault();
+    if (typeof messageInput === 'string' && messageInput.trim()) {
+      debouncedSendMessage(messageInput);
+      setMessageInput('');
+      setTemplatePreview(null);
     }
   };
 
@@ -50,7 +55,7 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
   // Effect to dynamically adjust the height of the textarea based on its content
   useEffect(() => {
     adjustTextareaHeight();
-  }, [message]);
+  }, [messageInput]);
 
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
@@ -64,32 +69,35 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
 
   // Function to handle emoji selection from the emoji picker
   const handleEmojiClick = (emojiObject) => {
-    setMessage(prevMessage => prevMessage + emojiObject.emoji);
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = messageInput;
+    const before = text.substring(0, start);
+    const after = text.substring(end, text.length);
+    
+    const newText = before + emojiObject.emoji + after;
+    setMessageInput(newText);
+    
+    // Set cursor position after the inserted emoji
+    setTimeout(() => {
+      textarea.selectionStart = textarea.selectionEnd = start + emojiObject.emoji.length;
+      textarea.focus();
+    }, 0);
   };
 
   // Function to handle file upload
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
     if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error('File upload failed');
-        }
-
-        const data = await response.json();
-        setMessage(prevMessage => prevMessage + `\n\nFile: ${data.filename}\nContent: ${data.content}`);
-      } catch (error) {
-        console.error('Error uploading file:', error);
-        // Handle error (e.g., show a toast notification)
-      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        setMessageInput(String(content)); // Ensure it's a string
+      };
+      reader.readAsText(file);
     }
   };
 
@@ -111,6 +119,18 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    if (applyTemplate && typeof applyTemplate === 'string') {
+      console.log('Applying template:', applyTemplate);
+      setMessageInput(prevInput => prevInput + applyTemplate);
+      setTemplatePreview(applyTemplate);
+      setApplyTemplate(null);
+      adjustTextareaHeight();
+      setNotification('Template applied successfully');
+      setTimeout(() => setNotification(null), 3000);
+    }
+  }, [applyTemplate, setMessageInput, setApplyTemplate]);
 
   // JSX for the MessageInput component
   return (
@@ -183,17 +203,23 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
               transition={{ duration: 0.2 }}
             >
               <EmojiPicker
-                onEmojiClick={handleEmojiClick}
+                onEmojiClick={(emojiObject) => handleEmojiClick(emojiObject)}
                 theme={Theme.DARK}
                 emojiStyle="native"
               />
             </motion.div>
           )}
         </AnimatePresence>
+        {templatePreview && (
+          <div className="mb-2 p-2 bg-gray-700 rounded-md text-sm text-gray-300">
+            <p className="font-semibold">Template Preview:</p>
+            <p>{templatePreview}</p>
+          </div>
+        )}
         <motion.textarea
           ref={textareaRef}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={messageInput || ''} // Ensure it's always a string
+          onChange={(e) => setMessageInput(e.target.value)}
           onKeyDown={handleKeyDown}
           className="flex-grow p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none"
           placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
@@ -225,6 +251,11 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
           )}
         </motion.button>
       </div>
+      {notification && (
+        <div className="absolute bottom-full left-0 mb-2 p-2 bg-green-500 text-white rounded-md">
+          {notification}
+        </div>
+      )}
     </motion.form>
   );
 }

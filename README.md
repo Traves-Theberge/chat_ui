@@ -28,6 +28,7 @@ This application is still in development and may contain bugs or incomplete feat
 - [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Prompt Templates](#prompt-templates)
 - [Environment Variables](#environment-variables)
 - [Database Setup](#database-setup)
 - [Performance Considerations](#performance-considerations)
@@ -51,9 +52,16 @@ src/
 ┃ ┗ page.jsx
 ┣ components/
 ┃ ┣ sidebar/
-┃ ┃ ┣ SidebarContainer.jsx
+┃ ┃ ┣ promptTemplates/
+┃ ┃ ┃ ┣ overview.mdx
+┃ ┃ ┃ ┣ PlaceholderFillModal.jsx
+┃ ┃ ┃ ┣ PromptTemplateButton.jsx
+┃ ┃ ┃ ┗ PromptTemplateModal.jsx
+┃ ┃ ┣ SidebarButton.jsx
 ┃ ┃ ┣ SidebarChatItem.jsx
 ┃ ┃ ┣ SidebarChatList.jsx
+┃ ┃ ┣ SidebarContainer.jsx
+┃ ┃ ┣ SidebarFooter.jsx
 ┃ ┃ ┣ SidebarHeader.jsx
 ┃ ┃ ┗ SidebarNewChatModal.jsx
 ┃ ┣ AuthForm.jsx
@@ -74,11 +82,16 @@ src/
 ┃ ┣ _app.jsx
 ┃ ┗ _document.jsx
 ┣ store/
-┃ ┗ chatStore.jsx
+┃ ┣ chatStore.jsx
+┃ ┗ promptTemplateStore.js
 ┣ styles/
 ┃ ┗ globals.css
+┣ uploads/
+┃ ┗ file.example
 ┗ utils/
+  ┣ apiUtils.js
   ┣ modelClients.jsx
+  ┣ promptTemplates.js
   ┣ sidebarHandlers.jsx
   ┗ supabaseClient.jsx
   .env.local
@@ -107,7 +120,10 @@ src/
 - Markdown support in chat messages, including code syntax highlighting
 - Emoji picker integration
 - File upload functionality
-- Dark mode UI
+- Prompt templates for quick message generation
+- Placeholder system for dynamic content in templates
+- File upload support for placeholders
+- Chat history download in multiple formats (TXT, JSON, CSV)
 
 ## Tech Stack
 
@@ -160,6 +176,34 @@ src/
 - **Upload File**: Click the paperclip icon to upload and include files in your messages.
 - **Use Emojis**: Click the emoji icon to open the emoji picker and add emojis to your messages.
 - **Delete Chat**: Click the trash icon next to a chat in the sidebar to delete it.
+- **Download Chat History**: Click the "Download Chat" button in the chat header to download the chat history in various formats.
+- **Prompt Templates**: Click the "Prompt Templates" button in the sidebar to access the Prompt Templates modal.
+- **Apply Template**: Select a template and fill in any placeholders in the PlaceholderFillModal. This modal allows you to input text for placeholders marked as `{{placeholder_name}}` in the template content.
+- **File Placeholders**: For placeholders marked as `{{file_reference}}`, you can upload text-based files. The content of the uploaded file will replace the placeholder in the template. Supported file formats include .txt, .html, .css, .js, .json, .xml, and .md.
+
+## Prompt Templates
+
+The Prompt Templates feature allows users to create, manage, and apply pre-defined text structures to their messages. This enhances the chat experience by providing quick access to commonly used prompts and allowing for customization through placeholders.
+
+### How to Use:
+
+1. Click the "Prompt Templates" button in the sidebar.
+2. In the modal, you can:
+   - Select an existing template
+   - Create a new template
+   - Edit or delete existing templates
+3. When applying a template with placeholders, fill in the required information in the PlaceholderFillModal.
+4. The filled template will be inserted into your message input.
+
+### Placeholder Types:
+
+- Basic placeholders: `{{placeholder_name}}`
+- File placeholders: Allows uploading text-based files
+
+### Performance Considerations:
+
+- Templates are stored in the database and fetched on-demand to reduce initial load time.
+- File uploads for placeholders are handled asynchronously to prevent UI blocking.
 
 ## Environment Variables
 
@@ -197,6 +241,31 @@ CREATE TABLE IF NOT EXISTS conversations (
     content text NOT NULL,
     created_at timestamp with time zone DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS prompt_templates (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name text NOT NULL,
+    content text NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+-- Create an index on the name column for faster lookups
+CREATE INDEX IF NOT EXISTS idx_prompt_templates_name ON prompt_templates(name);
+
+-- Create a trigger to update the updated_at column
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER IF NOT EXISTS update_prompt_templates_modtime
+BEFORE UPDATE ON prompt_templates
+FOR EACH ROW
+EXECUTE FUNCTION update_modified_column();
 ```
 
 These SQL commands will create the necessary tables for users, chat sessions, and conversations in your Supabase database.
@@ -207,6 +276,8 @@ These SQL commands will create the necessary tables for users, chat sessions, an
 - React's `useMemo` and `useCallback` are utilized in components for optimization.
 - The sidebar is collapsible to improve UI performance on mobile devices.
 - File uploads are handled asynchronously to prevent UI blocking.
+- Templates are stored in the database and fetched on-demand to reduce initial load time.
+- File uploads for placeholders are handled asynchronously to prevent UI blocking.
 
 ## Error Handling and Notifications
 
@@ -263,3 +334,16 @@ Please ensure your code adheres to the project's coding conventions and standard
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+## TO DO
+
+```
+./src/app/chat/page.jsx
+37:34  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+
+./src/components/MessageInput.jsx
+30:32  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+
+./src/components/sidebar/promptTemplates/PlaceholderFillModal.jsx
+81:6  Warning: React Hook useEffect has a missing dependency: 'validateInputs'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+```

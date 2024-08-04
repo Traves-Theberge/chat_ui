@@ -1,23 +1,27 @@
-import OpenAI from 'openai'; // Import OpenAI from the openai library
+import OpenAI from 'openai';
+import { applyTemplate, formatResponse, handleApiError } from '@/utils/apiUtils';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); // Initialize OpenAI with the API key from environment variables
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Define the API route handler
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
   try {
-    const { messages, model } = req.body;
-    console.log(`POST /api/openai/${model}`); // Log the model name
-    const completion = await openai.chat.completions.create({
+    const { messages, model, template } = req.body;
+    const processedMessages = template ? applyTemplate(messages, template.content) : messages;
+
+    console.log(`POST /api/openai/${model}`);
+
+    const response = await openai.chat.completions.create({
       model: model,
-      messages: messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
+      messages: processedMessages,
     });
-    res.status(200).json({ content: completion.choices[0].message.content.trim() });
+
+    res.status(200).json(formatResponse(response.choices[0].message.content, template?.name));
   } catch (error) {
-    console.error('OpenAI API error:', error);
-    res.status(500).json({ error: 'An error occurred while processing your request' });
+    handleApiError(error, res);
   }
 }
