@@ -114,3 +114,28 @@ body {
   position: fixed;
   z-index: 9999;
 }
+
+.prose-invert {
+  color: #e2e8f0;
+}
+
+.prose-invert h1,
+.prose-invert h2 {
+  color: #f8fafc;
+}
+
+.prose-invert a {
+  color: #60a5fa;
+}
+
+.prose-invert strong {
+  color: #f8fafc;
+}
+
+.prose-invert ol > li::before {
+  color: #94a3b8;
+}
+
+.prose-invert ul > li::before {
+  background-color: #94a3b8;
+}

@@ -4,8 +4,30 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV, faCopy, faTrash, faDownload } from '@fortawesome/free-solid-svg-icons';
+import useChatStore from '@/store/chatStore';
 
 export default function ChatMessages({ messages, isLoading, isAiResponding }) {
+  const { deleteMessage, fetchMessages, currentChat, subscribeToMessages, clearPendingResponse } = useChatStore(state => ({
+    deleteMessage: state.deleteMessage,
+    fetchMessages: state.fetchMessages,
+    currentChat: state.currentChat,
+    subscribeToMessages: state.subscribeToMessages,
+    clearPendingResponse: state.clearPendingResponse
+  }));
+
+  useEffect(() => {
+    if (currentChat) {
+      fetchMessages(currentChat);
+      const unsubscribe = subscribeToMessages(currentChat);
+      return () => {
+        if (unsubscribe) unsubscribe();
+        if (clearPendingResponse) clearPendingResponse(currentChat);
+      };
+    }
+  }, [currentChat, fetchMessages, subscribeToMessages, clearPendingResponse]);
+
   const [groupedMessages, setGroupedMessages] = useState([]);
   const messagesEndRef = useRef(null);
 
@@ -90,7 +112,11 @@ function MessageGroup({ messages }) {
 }
 
 function MessageBubble({ message, isGrouped }) {
-  const [showActions, setShowActions] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+  const deleteMessage = useChatStore(state => state.deleteMessage);
+  const copyMessage = useChatStore(state => state.copyMessage);
+  const downloadMessage = useChatStore(state => state.downloadMessage);
 
   const processedContent = useMemo(() => {
     if (message.file) {
@@ -99,22 +125,48 @@ function MessageBubble({ message, isGrouped }) {
     return message.content;
   }, [message.content, message.file]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleDelete = async () => {
+    await deleteMessage(message.id);
+    setShowMenu(false);
+  };
+
+  const handleCopy = () => {
+    copyMessage(message);
+    setShowMenu(false);
+  };
+
+  const handleDownload = () => {
+    downloadMessage(message);
+    setShowMenu(false);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`relative max-w-full md:max-w-2xl lg:max-w-3xl xl:max-w-4xl rounded-2xl p-4 
+      className={`relative max-w-full md:max-w-2xl lg:max-w-3xl xl:max-w-4xl rounded-2xl p-6 
         ${message.sender === 'user' 
           ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white self-end' 
           : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white self-start'} 
         shadow-lg 
-        ${isGrouped ? 'mt-1' : 'mt-3'}`}
-      onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => setShowActions(false)}
+        ${isGrouped ? 'mt-2' : 'mt-4'}`}
     >
       <ReactMarkdown
-        className="text-sm md:text-base leading-relaxed break-words"
+        className="text-sm md:text-base leading-relaxed break-words mb-4"
         components={{
           code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
@@ -148,11 +200,53 @@ function MessageBubble({ message, isGrouped }) {
           {new Date(message.created_at).toLocaleTimeString()}
         </p>
       </div>
-      {showActions && (
-        <div className="absolute top-2 right-2 flex space-x-2">
-          <button onClick={() => navigator.clipboard.writeText(message.content)} className="text-xs bg-gray-800 p-1 rounded">Copy</button>
-        </div>
-      )}
+      <div className="absolute top-2 right-2">
+        <motion.button
+          onClick={() => setShowMenu(!showMenu)}
+          className="text-xs p-2 rounded-full"
+          style={{ backgroundColor: 'transparent' }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <FontAwesomeIcon icon={faEllipsisV} />
+        </motion.button>
+        <AnimatePresence>
+          {showMenu && (
+            <motion.div
+              ref={menuRef}
+              className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.1 }}
+            >
+              <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <button
+                  onClick={handleCopy}
+                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
+                  role="menuitem"
+                >
+                  <FontAwesomeIcon icon={faCopy} className="mr-3" /> Copy
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
+                  role="menuitem"
+                >
+                  <FontAwesomeIcon icon={faTrash} className="mr-3" /> Delete
+                </button>
+                <button
+                  onClick={handleDownload}
+                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
+                  role="menuitem"
+                >
+                  <FontAwesomeIcon icon={faDownload} className="mr-3" /> Download
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 }

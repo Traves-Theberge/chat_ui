@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'; // Importing React and its hooks for state management and side effects
 import { motion, AnimatePresence } from 'framer-motion'; // Importing motion and AnimatePresence from framer-motion for animations and presence management
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Importing FontAwesomeIcon for icons
-import { faTimes, faEdit, faTrash, faPlus, faLightbulb, faSave } from '@fortawesome/free-solid-svg-icons'; // Importing icons for close, edit, trash, plus, lightbulb, and save
+import { faTimes, faEdit, faTrash, faPlus, faLightbulb, faSave, faInfoCircle } from '@fortawesome/free-solid-svg-icons'; // Importing icons for close, edit, trash, plus, lightbulb, save, and info circle
 import usePromptTemplateStore from '@/store/promptTemplateStore'; // Importing the usePromptTemplateStore hook for managing prompt templates
 import PlaceholderFillModal from './PlaceholderFillModal'; // Importing the PlaceholderFillModal component
 import { ToastContainer, toast } from 'react-toastify'; // Importing ToastContainer and toast from react-toastify for toast notifications
@@ -18,6 +18,7 @@ const PromptTemplateModal = ({ isOpen, onClose, onApplyTemplate, isCollapsed }) 
   const [editMode, setEditMode] = useState(false); // State for edit mode
   const [editedTemplate, setEditedTemplate] = useState({ name: '', content: '' }); // State for the edited template
   const [showPlaceholderModal, setShowPlaceholderModal] = useState(false); // State for showing the placeholder modal
+  const [showGuide, setShowGuide] = useState(false); // State for showing the guide
 
   const handleApplyTemplate = () => {
     if (selectedTemplate) {
@@ -140,7 +141,15 @@ const PromptTemplateModal = ({ isOpen, onClose, onApplyTemplate, isCollapsed }) 
             >
               <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
             </button>
-            <h2 className="text-3xl font-bold mb-6 text-white">Prompt Templates</h2>
+            <h2 className="text-3xl font-bold mb-6 text-white flex items-center">
+              Prompt Templates
+              <button
+                onClick={() => setShowGuide(!showGuide)}
+                className="ml-2 text-gray-400 hover:text-white focus:outline-none"
+              >
+                <FontAwesomeIcon icon={faInfoCircle} className="h-5 w-5" />
+              </button>
+            </h2>
             {!editMode ? (
               <>
                 <TemplateList
@@ -217,6 +226,110 @@ const PromptTemplateModal = ({ isOpen, onClose, onApplyTemplate, isCollapsed }) 
           onPlaceholdersFilled={handlePlaceholdersFilled}
           isNested={true} // Add this prop to indicate it's a nested modal
         />
+      )}
+      {showGuide && (
+        <motion.div
+          key="guide-modal"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        >
+          <motion.div
+            key="guide-content"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            className="bg-gray-800 p-8 rounded-xl shadow-2xl relative max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+          >
+            <button
+              onClick={() => setShowGuide(false)}
+              aria-label="Close guide"
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-10 h-10 flex items-center justify-center rounded-full"
+            >
+              <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+            </button>
+            <div className="prose prose-invert max-w-none">
+              <h1 className="text-4xl font-bold text-blue-400 mb-8">Building Prompt Templates</h1>
+              
+              <section className="mb-12">
+                <h2 className="text-3xl font-semibold text-green-400 mb-4">Template Basics</h2>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li className="text-gray-300">Use clear, descriptive names for your templates</li>
+                  <li className="text-gray-300">Write your template content in the "Template Content" field</li>
+                  <li className="text-gray-300">Use placeholders for dynamic content</li>
+                </ul>
+              </section>
+              
+              <section className="mb-12">
+                <h2 className="text-3xl font-semibold text-green-400 mb-4">Placeholders</h2>
+                <p className="text-gray-300 mb-2">Syntax: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;placeholder_name&#125;&#125;</code></p>
+                <p className="text-gray-300 mb-2">Examples:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li className="text-gray-300">Basic: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;concept&#125;&#125;</code></li>
+                  <li className="text-gray-300">Multiple: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;topic1&#125;&#125;</code> and <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;topic2&#125;&#125;</code></li>
+                  <li className="text-gray-300">Numbered: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;number&#125;&#125;</code> advantages of <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;technology&#125;&#125;</code></li>
+                </ul>
+              </section>
+              
+              <section className="mb-12">
+                <h2 className="text-3xl font-semibold text-green-400 mb-4">Special Placeholders</h2>
+                <ol className="list-decimal pl-6 space-y-6">
+                  <li className="text-gray-300">
+                    <h3 className="text-xl font-semibold text-yellow-400 mb-2">File Reference</h3>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li>Syntax: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;file_reference&#125;&#125;</code></li>
+                      <li>Allows users to upload and include file contents</li>
+                      <li>Supported formats: .txt, .html, .css, .js, .json, .xml, .md</li>
+                    </ul>
+                  </li>
+                  <li className="text-gray-300">
+                    <h3 className="text-xl font-semibold text-yellow-400 mb-2">Longer Text</h3>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li>Syntax: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;text_passage&#125;&#125;</code></li>
+                      <li>Use for multi-line text inputs</li>
+                    </ul>
+                  </li>
+                  <li className="text-gray-300">
+                    <h3 className="text-xl font-semibold text-yellow-400 mb-2">Code Snippet</h3>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li>Syntax: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;language&#125;&#125; &#123;&#123;code_snippet&#125;&#125;</code></li>
+                      <li>Specify the programming language and include a code block</li>
+                    </ul>
+                  </li>
+                </ol>
+              </section>
+              
+              <section className="mb-12">
+                <h2 className="text-3xl font-semibold text-green-400 mb-4">File Required Feature</h2>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li className="text-gray-300">Add ":file" to a placeholder to make it a file upload field</li>
+                  <li className="text-gray-300">Example: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;code_sample:file&#125;&#125;</code></li>
+                  <li className="text-gray-300">Users will see an "Upload" button for this placeholder</li>
+                </ul>
+              </section>
+              
+              <section className="mb-12">
+                <h2 className="text-3xl font-semibold text-green-400 mb-4">Best Practices</h2>
+                <ol className="list-decimal pl-6 space-y-2">
+                  <li className="text-gray-300">Preview your template before saving</li>
+                  <li className="text-gray-300">Use descriptive placeholder names</li>
+                  <li className="text-gray-300">Combine different placeholder types for versatility</li>
+                  <li className="text-gray-300">Update templates regularly to maintain relevance</li>
+                </ol>
+              </section>
+              
+              <section>
+                <h2 className="text-3xl font-semibold text-green-400 mb-4">Troubleshooting</h2>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li className="text-gray-300">Ensure correct placeholder syntax: <code className="bg-gray-700 px-2 py-1 rounded">&#123;&#123;placeholder_name&#125;&#125;</code></li>
+                  <li className="text-gray-300">Check for typos in placeholder names</li>
+                  <li className="text-gray-300">Verify file types for file upload placeholders</li>
+                </ul>
+              </section>
+            </div>
+          </motion.div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

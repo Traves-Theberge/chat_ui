@@ -11,7 +11,7 @@ import PromptTemplateButton from './promptTemplates/PromptTemplateButton';
 import PromptTemplateModal from './promptTemplates/PromptTemplateModal';
 import { fillTemplatePlaceholders } from '@/utils/apiUtils';
 
-export default function Sidebar({ setCurrentChat, currentChat, onChatDelete }) {
+export default function Sidebar({ setCurrentChat, currentChat, onChatDelete, isMessageLoading }) {
   const { chats, fetchChats } = useChatStore((state) => ({ 
     chats: state.chats,
     fetchChats: state.fetchChats
@@ -83,6 +83,7 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete }) {
         currentChat={currentChat}
         setCurrentChat={setCurrentChat}
         handleDeleteChat={(chatId) => handleDeleteChat(chatId, fetchChats, setCurrentChat, currentChat, onChatDelete)}
+        isMessageLoading={isMessageLoading}
       />
       <div className="mt-auto p-4">
         <PromptTemplateButton onClick={handleOpenPromptTemplateModal} isCollapsed={isCollapsed} />

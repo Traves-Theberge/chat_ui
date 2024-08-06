@@ -3,7 +3,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SidebarChatItem from './SidebarChatItem';
 
-const SidebarChatList = ({ isLoading, isCollapsed, chats, currentChat, setCurrentChat, handleDeleteChat }) => {
+const SidebarChatList = ({ isLoading, isCollapsed, chats, currentChat, setCurrentChat, handleDeleteChat, isMessageLoading }) => {
   return (
     <div className="flex-grow overflow-y-auto">
       <div className="p-4 space-y-2">
@@ -17,8 +17,9 @@ const SidebarChatList = ({ isLoading, isCollapsed, chats, currentChat, setCurren
                 chat={chat}
                 isCollapsed={isCollapsed}
                 isActive={currentChat === chat.id}
-                onClick={() => setCurrentChat(chat.id)}
+                onClick={() => !isMessageLoading && setCurrentChat(chat.id)}
                 onDelete={() => handleDeleteChat(chat.id)}
+                isDisabled={isMessageLoading}
               />
             ))}
           </AnimatePresence>

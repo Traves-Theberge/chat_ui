@@ -30,9 +30,15 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(true);
   // State to manage AI response loading
   const [isAiResponding, setIsAiResponding] = useState(false);
+  // State to manage message loading
+  const [isMessageLoading, setIsMessageLoading] = useState(false);
   // Router instance from Next.js
   const router = useRouter();
   const { session, loading } = useAuth();
+  const { subscribeToMessages } = useChatStore(state => ({
+    subscribeToMessages: state.subscribeToMessages,
+    currentChat: state.currentChat
+  }));
 
   const debouncedFetchMessages = useCallback(
     debounce((chatId) => {
@@ -54,6 +60,8 @@ export default function ChatPage() {
   // Function to handle sending a message
   const handleSendMessage = useCallback(async (message) => {
     if (!currentChat) return;
+
+    setIsMessageLoading(true);
 
     const userMessage = {
       content: message,
@@ -108,8 +116,9 @@ export default function ChatPage() {
       toast.error('Error generating response: ' + error.message);
     } finally {
       setIsAiResponding(false);
+      setIsMessageLoading(false);
     }
-  }, [currentChat, model, messages, sendMessage, setIsAiResponding]);
+  }, [currentChat, model, messages, sendMessage]);
 
   // Effect to check authentication status on component mount
   useEffect(() => {
@@ -130,6 +139,16 @@ export default function ChatPage() {
     }
   };
 
+  useEffect(() => {
+    let unsubscribe;
+    if (currentChat) {
+      unsubscribe = subscribeToMessages(currentChat);
+    }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [currentChat, subscribeToMessages]);
+
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       {/* Sidebar component to select chat sessions */}
@@ -137,12 +156,13 @@ export default function ChatPage() {
         setCurrentChat={setCurrentChat} 
         currentChat={currentChat} 
         onChatDelete={handleChatDelete}
+        isMessageLoading={isMessageLoading}
       />
       <div className="flex flex-col flex-grow bg-gray-800">
         {/* Chat header component */}
         <ChatHeader currentChat={currentChat} model={model} setModel={setModel} />
         {/* Chat messages component */}
-        <ChatMessages messages={messages} isLoading={isLoading} isAiResponding={isAiResponding} />
+        <ChatMessages messages={messages} isLoading={isLoading} isAiResponding={isAiResponding} isMessageLoading={isMessageLoading} />
         {/* Message input component */}
         <MessageInput onSendMessage={handleSendMessage} model={model} />
       </div>

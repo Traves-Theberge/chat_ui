@@ -52,24 +52,14 @@ const useChatStore = create((set, get) => ({
   
   // Function to send a new message
   sendMessage: async (message) => {
-    const { messages, currentChat, selectedTemplate } = get(); // Get the current state
-    // Prepare the new message with the current chat session ID, timestamp, and file information
-    const newMessage = {
-      ...message,
-      session_id: currentChat,
-      created_at: new Date().toISOString(),
-      file: message.file // Add this line
-    };
-    // Add the new message to the state
-    set({ messages: [...messages, newMessage] });
-    try {
-      // Insert the new message into the database
-      const { error } = await supabase.from('conversations').insert(newMessage);
-      if (error) throw error; // Throw the error if there's an issue with the insertion
-    } catch (error) {
-      console.error('Error sending message:', error); // Log the error if it occurs
-      // Optionally, remove the message from the state if it failed to send
-      set({ messages: messages });
+    const { currentChat } = get();
+    const { data, error } = await supabase
+      .from('conversations')
+      .insert({ ...message, session_id: currentChat })
+      .single();
+
+    if (error) {
+      console.error('Error sending message:', error);
     }
   },
   
@@ -194,29 +184,97 @@ const useChatStore = create((set, get) => ({
     }
   },
   
-  // New function to prepare chat history for download
-  prepareDownload: (format = 'txt') => {
+  // Updated deleteMessage function
+  deleteMessage: async (messageId) => {
     const { messages, currentChat } = get();
-    let content, mimeType;
+    try {
+      // Delete the message from Supabase
+      const { error } = await supabase
+        .from('conversations')
+        .delete()
+        .match({ id: messageId, session_id: currentChat });
+
+      if (error) throw error;
+
+      // Update the local state
+      set({ messages: messages.filter(msg => msg.id !== messageId) });
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  },
+  
+  // Function to copy a message
+  copyMessage: (message) => {
+    navigator.clipboard.writeText(message.content);
+  },
+  
+  // Function to download a message
+  downloadMessage: (message, format = 'txt') => {
+    const { prepareDownload } = get();
+    const { url, filename } = prepareDownload(format, [message]);
+    const element = document.createElement('a');
+    element.href = url;
+    element.download = filename;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  },
+  
+  // Updated prepareDownload function to handle single message
+  prepareDownload: (format = 'txt', messagesToDownload = null) => {
+    const { messages, currentChat } = get();
+    const messagesToUse = messagesToDownload || messages;
+    let content, mimeType, extension;
 
     switch (format) {
       case 'json':
-        content = JSON.stringify(messages, null, 2);
+        content = JSON.stringify(messagesToUse, null, 2);
         mimeType = 'application/json';
+        extension = 'json';
         break;
       case 'csv':
-        content = messages.map(msg => `${msg.sender},${msg.content}`).join('\n');
+        content = 'Sender,Content,Timestamp\n' + 
+          messagesToUse.map(msg => `"${msg.sender}","${msg.content}","${msg.created_at}"`).join('\n');
         mimeType = 'text/csv';
+        extension = 'csv';
         break;
       default:
-        content = messages.map(msg => `${msg.sender}: ${msg.content}`).join('\n\n');
+        content = messagesToUse.map(msg => `${msg.sender} (${new Date(msg.created_at).toLocaleString()}):\n${msg.content}\n`).join('\n');
         mimeType = 'text/plain';
+        extension = 'txt';
     }
 
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
-    return { url, filename: `chat_history_${currentChat}.${format}` };
+    return { url, filename: `chat_history_${currentChat}.${extension}` };
   },
+  
+  // New function to subscribe to real-time message updates
+  subscribeToMessages: (chatId) => {
+    const channel = supabase
+      .channel(`public:conversations:session_id=eq.${chatId}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'conversations' },
+        (payload) => {
+          set((state) => ({
+            messages: [...state.messages, payload.new]
+          }));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  },
+  
+  // New function to clear pending responses
+  clearPendingResponse: (chatId) => {
+    set((state) => ({
+      messages: state.messages.filter(msg => msg.session_id !== chatId || msg.status !== 'pending')
+    }));
+  }
 }));
 
 export default useChatStore; // Export the useChatStore hook

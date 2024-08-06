@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faComment } from '@fortawesome/free-solid-svg-icons';
 
-const SidebarChatItem = ({ chat, isCollapsed, isActive, onClick, onDelete }) => {
+const SidebarChatItem = ({ chat, isCollapsed, isActive, onClick, onDelete, isDisabled }) => {
   return (
     <motion.div
       layout
@@ -12,10 +12,10 @@ const SidebarChatItem = ({ chat, isCollapsed, isActive, onClick, onDelete }) => 
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
-      onClick={onClick}
+      onClick={isDisabled ? undefined : onClick}
       className={`p-2 rounded-lg cursor-pointer transition duration-200 flex justify-between items-center h-10 ${
         isActive ? 'bg-blue-600 text-white' : 'bg-gray-800 hover:bg-gray-700'
-      }`}
+      } ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <AnimatePresence mode="wait">
         {isCollapsed ? (

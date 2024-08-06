@@ -1,30 +1,17 @@
 # Chat UI
 
-This chat application is built on Next.js and incorporates AI capabilities. It leverages Supabase for user authentication and data management, while OpenAI and Mistral AI are utilized for response generation and can be selected interchangeably in the chat.
+This chat application is built on Next.js and incorporates AI capabilities. It leverages Supabase for user authentication, data management, and real-time messaging. OpenAI and Mistral AI are utilized for response generation and can be selected interchangeably in the chat.
 
-🔑 ** Just Add API Keys for Open AI, Mistral & Set Up Supabase**
-
-
-## Disclaimer
-
-This application is still in development and may contain bugs or incomplete features. Please be aware that using it in a production environment is not recommended at this stage. We appreciate any feedback or bug reports to help improve the application.
-
-## Homepage w/ Login and signup
-![Homepage](https://github.com/user-attachments/assets/d84078a7-31d6-4b73-b4ff-c84bbcb62442)
-
-## Chat sessions
-
-![ChatSession](https://github.com/user-attachments/assets/18d10c5d-edcf-48ca-a91f-22315de7397c)
+🔑 **Just Add API Keys for Open AI, Mistral & Set Up Supabase**
 
 
-![ChatSessionUploadCollapsed](https://github.com/user-attachments/assets/2fb51f38-74ec-460f-9d48-abcda6381a50)
+🚨 **Disclaimer**
 
+This project is for educational and demonstration purposes only. It is not intended for production use without proper security measures and compliance with applicable laws and regulations. The use of AI models and third-party services may be subject to their respective terms of service and privacy policies.
 
-## Table of Contents
 
 - [Disclaimer](#disclaimer)
 - [Features](#features)
-- [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -37,6 +24,34 @@ This application is still in development and may contain bugs or incomplete feat
 - [API Routes](#api-routes)
 - [Contributing](#contributing)
 - [License](#license)
+- [TO DO](#to-do)
+
+## Features
+
+- User authentication (signup, login, and logout) with Supabase
+- Real-time messaging with AI models
+- Chat session management (create, read, and delete chats)
+- Model selection for different AI interactions
+- Support for multiple AI models:
+  - OpenAI models: GPT-4o, GPT-3.5-turbo, GPT-4-turbo, GPT-4o-mini (default)
+  - Mistral models: mistral-tiny-latest, mistral-small-latest, mistral-medium-latest, mistral-large-latest, 
+  open-mistral-nemo, codestral-latest
+- Markdown support in chat messages, including code syntax highlighting
+- Emoji picker integration
+- File upload functionality
+- Prompt templates for quick message generation
+    - Placeholder system for dynamic content in templates
+    - File upload support for placeholders
+- Chat history download in multiple formats (TXT, JSON, CSV)
+- Real-time typing indicators
+- Improved loading states for better user feedback
+- Smoother animations for message additions and removals
+- AI-powered chat responses from OpenAI and Mistral AI
+- Customizable prompt templates
+- File uploads and sharing
+- Message editing and deletion with real-time updates
+- Responsive design for mobile and desktop
+- Manage chat logs with options to delete, copy, and download individual messages or the entire chat history in .json, .csv, and .txt formats
 
 ## Project Structure
 ```
@@ -107,38 +122,6 @@ src/
   tailwind.config.js
 ```
 
-## Features
-
-- User authentication (signup, login, and logout) with Supabase
-- Real-time messaging with AI models
-- Chat session management (create, read, and delete chats)
-- Model selection for different AI interactions
-- Support for multiple AI models:
-  - OpenAI models: GPT-4o, GPT-3.5-turbo, GPT-4-turbo, GPT-4o-mini (default)
-  - Mistral models: mistral-tiny-latest, mistral-small-latest, mistral-medium-latest, mistral-large-latest, open-mistral-nemo, codestral-latest
-- Responsive UI with collapsible sidebar for mobile devices
-- Markdown support in chat messages, including code syntax highlighting
-- Emoji picker integration
-- File upload functionality
-- Prompt templates for quick message generation
-- Placeholder system for dynamic content in templates
-- File upload support for placeholders
-- Chat history download in multiple formats (TXT, JSON, CSV)
-
-## Tech Stack
-
-- **Next.js**: React framework for server-side rendering and routing
-- **React**: JavaScript library for building user interfaces
-- **Supabase**: Open-source Firebase alternative for authentication and database
-- **Tailwind CSS**: Utility-first CSS framework
-- **OpenAI API**: Provides GPT model integration
-- **Mistral AI**: Offers alternative AI models for chat completions
-- **Framer Motion**: Production-ready motion library for React
-- **Zustand**: State management solution
-- **React Markdown**: Markdown rendering for chat messages
-- **React Syntax Highlighter**: Code syntax highlighting in chat messages
-- **React Toastify**: Toast notifications for user feedback
-- **Lodash**: Utility library for functions like debounce
 
 ## Installation
 
