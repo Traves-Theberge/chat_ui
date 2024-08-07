@@ -6,6 +6,13 @@ const usePromptTemplateStore = create((set, get) => ({
   templates: [...defaultTemplates],
   isLoading: false,
   error: null,
+  selectedTemplate: null,
+  isModalOpen: false,
+  isEditMode: false,
+
+  setSelectedTemplate: (template) => set({ selectedTemplate: template }),
+  setIsModalOpen: (isOpen) => set({ isModalOpen: isOpen }),
+  setIsEditMode: (isEdit) => set({ isEditMode: isEdit }),
 
   fetchTemplates: async () => {
     set({ isLoading: true });
@@ -17,7 +24,6 @@ const usePromptTemplateStore = create((set, get) => ({
 
       if (error) throw error;
 
-      // Combine default templates with fetched templates
       const combinedTemplates = [...defaultTemplates, ...data];
       set({ templates: combinedTemplates, isLoading: false });
     } catch (error) {
@@ -26,50 +32,70 @@ const usePromptTemplateStore = create((set, get) => ({
   },
 
   addTemplate: async (template) => {
-    const { data, error } = await supabase
-      .from('prompt_templates')
-      .insert(template)
-      .single();
+    set({ isLoading: true });
+    try {
+      const { data, error } = await supabase
+        .from('prompt_templates')
+        .insert(template)
+        .single();
 
-    if (error) {
-      set({ error: error.message });
-    } else {
-      set((state) => ({ templates: [data, ...state.templates] }));
+      if (error) throw error;
+
+      set((state) => ({
+        templates: [data, ...state.templates],
+        isLoading: false,
+        isEditMode: false,
+      }));
+    } catch (error) {
+      set({ error: error.message, isLoading: false });
     }
   },
 
   removeTemplate: async (templateId) => {
-    const { error } = await supabase
-      .from('prompt_templates')
-      .delete()
-      .match({ id: templateId });
+    set({ isLoading: true });
+    try {
+      const { error } = await supabase
+        .from('prompt_templates')
+        .delete()
+        .match({ id: templateId });
 
-    if (error) {
-      set({ error: error.message });
-    } else {
+      if (error) throw error;
+
       set((state) => ({
         templates: state.templates.filter((t) => t.id !== templateId),
+        isLoading: false,
+        selectedTemplate: null,
       }));
+    } catch (error) {
+      set({ error: error.message, isLoading: false });
     }
   },
 
   updateTemplate: async (templateId, updatedTemplate) => {
-    const { data, error } = await supabase
-      .from('prompt_templates')
-      .update(updatedTemplate)
-      .match({ id: templateId })
-      .single();
+    set({ isLoading: true });
+    try {
+      const { data, error } = await supabase
+        .from('prompt_templates')
+        .update(updatedTemplate)
+        .match({ id: templateId })
+        .single();
 
-    if (error) {
-      set({ error: error.message });
-    } else {
+      if (error) throw error;
+
       set((state) => ({
         templates: state.templates.map((t) =>
           t.id === templateId ? { ...t, ...data } : t
         ),
+        isLoading: false,
+        isEditMode: false,
+        selectedTemplate: { ...data },
       }));
+    } catch (error) {
+      set({ error: error.message, isLoading: false });
     }
   },
+
+  clearError: () => set({ error: null }),
 }));
 
 export default usePromptTemplateStore;

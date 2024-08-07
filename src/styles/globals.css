@@ -139,3 +139,17 @@ body {
 .prose-invert ul > li::before {
   background-color: #94a3b8;
 }
+
+.preview-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.preview-container.show {
+  max-height: 80%;
+}
