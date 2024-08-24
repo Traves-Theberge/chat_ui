@@ -274,6 +274,33 @@ const useChatStore = create((set, get) => ({
     set((state) => ({
       messages: state.messages.filter(msg => msg.session_id !== chatId || msg.status !== 'pending')
     }));
+  },
+  
+  // New actions for ElevenLabs text-to-speech
+  speakMessage: async (message) => {
+    try {
+      const { textToSpeech } = await import('@/utils/elevenlabsUtils');
+      const audioUrl = await textToSpeech(message.content);
+      const audio = new Audio(audioUrl);
+      audio.onended = () => URL.revokeObjectURL(audioUrl);
+      await audio.play();
+    } catch (error) {
+      console.error('Error speaking message:', error);
+    }
+  },
+  
+  speakConversation: async () => {
+    const { messages } = get();
+    try {
+      const { textToSpeech } = await import('@/utils/elevenlabsUtils');
+      const conversationText = messages.map(m => `${m.sender}: ${m.content}`).join('\n');
+      const audioUrl = await textToSpeech(conversationText);
+      const audio = new Audio(audioUrl);
+      audio.onended = () => URL.revokeObjectURL(audioUrl);
+      await audio.play();
+    } catch (error) {
+      console.error('Error speaking conversation:', error);
+    }
   }
 }));
 
