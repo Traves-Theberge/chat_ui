@@ -223,6 +223,11 @@ function MessageBubble({ message, isGrouped }) {
             <motion.div
               ref={menuRef}
               className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5"
+              style={{
+                zIndex: 10,
+                top: '100%',
+                right: 0,
+              }}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
