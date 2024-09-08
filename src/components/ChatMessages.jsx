@@ -5,18 +5,16 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faCopy, faTrash, faDownload, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faCopy, faTrash, faDownload } from '@fortawesome/free-solid-svg-icons';
 import useChatStore from '@/store/chatStore';
 
 export default function ChatMessages({ messages, isLoading, isAiResponding }) {
-  const { deleteMessage, fetchMessages, currentChat, subscribeToMessages, clearPendingResponse, speakMessage, speakConversation } = useChatStore(state => ({
+  const { deleteMessage, fetchMessages, currentChat, subscribeToMessages, clearPendingResponse } = useChatStore(state => ({
     deleteMessage: state.deleteMessage,
     fetchMessages: state.fetchMessages,
     currentChat: state.currentChat,
     subscribeToMessages: state.subscribeToMessages,
-    clearPendingResponse: state.clearPendingResponse,
-    speakMessage: state.speakMessage,
-    speakConversation: state.speakConversation
+    clearPendingResponse: state.clearPendingResponse
   }));
 
   useEffect(() => {
@@ -119,7 +117,6 @@ function MessageBubble({ message, isGrouped }) {
   const deleteMessage = useChatStore(state => state.deleteMessage);
   const copyMessage = useChatStore(state => state.copyMessage);
   const downloadMessage = useChatStore(state => state.downloadMessage);
-  const speakMessage = useChatStore(state => state.speakMessage);
 
   const processedContent = useMemo(() => {
     if (message.file) {
@@ -153,11 +150,6 @@ function MessageBubble({ message, isGrouped }) {
 
   const handleDownload = () => {
     downloadMessage(message);
-    setShowMenu(false);
-  };
-
-  const handleSpeak = () => {
-    speakMessage(message);
     setShowMenu(false);
   };
 
@@ -254,13 +246,6 @@ function MessageBubble({ message, isGrouped }) {
                   role="menuitem"
                 >
                   <FontAwesomeIcon icon={faDownload} className="mr-3" /> Download
-                </button>
-                <button
-                  onClick={handleSpeak}
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
-                  role="menuitem"
-                >
-                  <FontAwesomeIcon icon={faVolumeUp} className="mr-3" /> Speak
                 </button>
               </div>
             </motion.div>

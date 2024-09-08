@@ -1,8 +1,8 @@
 # Chat UI
 
-This chat application is built on Next.js and incorporates AI capabilities. It leverages Supabase for user authentication, data management, and real-time messaging. OpenAI and Mistral AI are utilized for response generation and can be selected interchangeably in the chat. Additionally, ElevenLabs is integrated for text-to-speech functionality, allowing for audio playback of messages and conversations.
+This chat application is built on Next.js and incorporates AI capabilities. It leverages Supabase for user authentication, data management, and real-time messaging. OpenAI and Mistral AI are utilized for response generation and can be selected interchangeably in the chat.
 
-🔑 **Just Add API Keys for Open AI, Mistral, Eleven Labs & Set Up Supabase**
+🔑 **Just Add API Keys for Open AI, Mistral & Set Up Supabase**
 
 
 🚨 **Disclaimer**
@@ -52,7 +52,6 @@ This project is for educational and demonstration purposes only. It is not inten
 - Message editing and deletion with real-time updates
 - Responsive design for mobile and desktop
 - Manage chat logs with options to delete, copy, and download individual messages or the entire chat history in .json, .csv, and .txt formats
-- Text-to-speech functionality for individual messages and full conversations using ElevenLabs API (Jessica voice with eleven_turbo_v2_5 model)
 
 ## Project Structure
 ```
@@ -94,7 +93,6 @@ src/
 ┃ ┣ api/
 ┃ ┃ ┣ mistral.jsx
 ┃ ┃ ┣ openai.jsx
-┃ ┃ ┣ elevenlabs.jsx
 ┃ ┃ ┗ upload.jsx
 ┃ ┣ _app.jsx
 ┃ ┗ _document.jsx
@@ -110,7 +108,6 @@ src/
   ┣ modelClients.jsx
   ┣ promptTemplates.js
   ┣ sidebarHandlers.jsx
-  ┣ elevenlabsUtils.js
   ┗ supabaseClient.jsx
   .env.local
   .eslintrc.json
@@ -166,32 +163,6 @@ src/
 - **Prompt Templates**: Click the "Prompt Templates" button in the sidebar to access the Prompt Templates modal.
 - **Apply Template**: Select a template and fill in any placeholders in the PlaceholderFillModal. This modal allows you to input text for placeholders marked as `{{placeholder_name}}` in the template content.
 - **File Placeholders**: For placeholders marked as `{{file_reference}}`, you can upload text-based files. The content of the uploaded file will replace the placeholder in the template. Supported file formats include .txt, .html, .css, .js, .json, .xml, and .md.
-- **Text-to-Speech**: Click the speaker icon next to a message to listen to it. Click the speaker icon in the chat header to listen to the entire conversation.
-
-## Text-to-Speech Functionality
-
-This application integrates ElevenLabs' text-to-speech API to provide audio playback of messages and conversations.
-
-### Features:
-- Convert individual messages to speech
-- Convert entire conversations to speech
-- Uses ElevenLabs' Jessica voice with the eleven_turbo_v2_5 model
-
-### How it works:
-1. The application sends the text to the ElevenLabs API.
-2. The API returns an audio stream.
-3. The audio is then played through the user's speakers using the Web Audio API.
-
-### Usage:
-- To hear a single message: Click the speaker icon next to the message.
-- To hear the entire conversation: Click the speaker icon in the chat header.
-
-### Technical Details:
-- The `textToSpeech` function in `src/utils/elevenlabsUtils.js` handles the API call to ElevenLabs.
-- The `speakMessage` and `speakConversation` functions in `src/store/chatStore.jsx` manage the audio playback.
-
-### Note:
-Ensure your ElevenLabs API key is correctly set in your environment variables for this feature to work.
 
 ## Prompt Templates
 
@@ -226,7 +197,6 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 MISTRAL_API_KEY=your_mistral_api_key
 OPENAI_API_KEY=your_openai_api_key
-NEXT_PUBLIC_ELEVENLABS_API_KEY=your_elevenlabs_api_key
 ```
 
 ## Database Setup
@@ -317,7 +287,6 @@ This project relies on several key dependencies to provide its functionality:
 - **Lodash**: ^4.17.21
 - **Emoji Picker React**: ^4.11.1
 - **Font Awesome**: ^6.6.0
-- **@elevenlabs/node-api**: ^1.0.1
 
 These dependencies provide essential functionality for state management, UI animations, markdown rendering, syntax highlighting, notifications, data fetching, and integration with AI services.
 
@@ -329,7 +298,6 @@ The application includes API routes for interacting with AI models:
 
 - `/api/openai.jsx`: Handles requests to the OpenAI API
 - `/api/mistral.jsx`: Handles requests to the Mistral AI API
-- `/api/elevenlabs.jsx`: Handles requests to the ElevenLabs API for text-to-speech
 - `/api/upload.jsx`: Handles file uploads
 
 These routes are used to securely communicate with external AI services and manage file uploads.
@@ -350,16 +318,4 @@ Please ensure your code adheres to the project's coding conventions and standard
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
-## TO DO
-
-```
-./src/app/chat/page.jsx
-37:34  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
-
-./src/components/MessageInput.jsx
-30:32  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
-
-./src/components/sidebar/promptTemplates/PlaceholderFillModal.jsx
-81:6  Warning: React Hook useEffect has a missing dependency: 'validateInputs'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
-```
 

@@ -12,11 +12,12 @@ import useChatStore from '@/store/chatStore';
 // Define the MessageInput component
 export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding }) {
   const { messageInput, setMessageInput, applyTemplate, setApplyTemplate } = useChatStore(state => ({
-    messageInput: state.messageInput || '', // Ensure it's always a string
+    messageInput: state.messageInput,
     setMessageInput: state.setMessageInput,
     applyTemplate: state.applyTemplate,
     setApplyTemplate: state.setApplyTemplate
   }));
+
   const [showPicker, setShowPicker] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const textareaRef = useRef(null);

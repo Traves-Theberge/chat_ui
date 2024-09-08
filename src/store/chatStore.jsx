@@ -111,79 +111,6 @@ const useChatStore = create((set, get) => ({
     }
   },
   
-  // New action to set the message input
-  setMessageInput: (input) => set({ messageInput: input }),
-  
-  // New action to apply a prompt template
-  applyTemplate: (template) => {
-    try {
-      if (!template || typeof template !== 'string') {
-        throw new Error('Invalid template');
-      }
-      set({ messageInput: template });
-    } catch (error) {
-      console.error('Error applying template:', error.message);
-      // Optionally, you can set an error state or show a notification to the user
-    }
-  },
-  
-  // New action to set the applied template
-  setApplyTemplate: (template) => {
-    if (typeof template === 'string' && template.trim() !== '') {
-      set({ applyTemplate: template });
-    } else {
-      console.error('Invalid template: Template must be a non-empty string');
-    }
-  },
-  
-  // New action to set the selected template
-  setSelectedTemplate: (template) => set({ selectedTemplate: template }),
-  
-  // Function to update the state directly
-  set: (fn) => set(fn),
-  
-  // Function to add a new chat session to the state
-  addChat: (newChat) => set((state) => {
-    // Check if the new chat session already exists in the state
-    if (!state.chats.some(chat => chat.id === newChat.id)) {
-      // If it doesn't exist, add it to the beginning of the chats array
-      return { chats: [newChat, ...state.chats] };
-    }
-    // If it already exists, return the current state
-    return state;
-  }),
-  
-  // Function to create a new chat session
-  createChat: async (chatName) => {
-    try {
-      // Check if a chat with the same name already exists
-      const { data: existingChats, error: fetchError } = await supabase
-        .from('chat_sessions')
-        .select('id')
-        .eq('session_name', chatName)
-        .limit(1);
-
-      if (fetchError) throw fetchError;
-
-      if (existingChats && existingChats.length > 0) {
-        throw new Error('A chat with this name already exists');
-      }
-
-      const { data, error } = await supabase
-        .from('chat_sessions')
-        .insert({ session_name: chatName })
-        .select()
-        .single();
-
-      if (error) throw error;
-      set((state) => ({ chats: [data, ...state.chats] }));
-      return data;
-    } catch (error) {
-      console.error('Error creating chat:', error);
-      throw error;
-    }
-  },
-  
   // Updated deleteMessage function
   deleteMessage: async (messageId) => {
     const { messages, currentChat } = get();
@@ -225,7 +152,7 @@ const useChatStore = create((set, get) => ({
     const { messages, currentChat } = get();
     const messagesToUse = messagesToDownload || messages;
     let content, mimeType, extension;
-
+  
     switch (format) {
       case 'json':
         content = JSON.stringify(messagesToUse, null, 2);
@@ -243,7 +170,7 @@ const useChatStore = create((set, get) => ({
         mimeType = 'text/plain';
         extension = 'txt';
     }
-
+  
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     return { url, filename: `chat_history_${currentChat}.${extension}` };
@@ -263,7 +190,7 @@ const useChatStore = create((set, get) => ({
         }
       )
       .subscribe();
-
+  
     return () => {
       supabase.removeChannel(channel);
     };
@@ -276,32 +203,8 @@ const useChatStore = create((set, get) => ({
     }));
   },
   
-  // New actions for ElevenLabs text-to-speech
-  speakMessage: async (message) => {
-    try {
-      const { textToSpeech } = await import('@/utils/elevenlabsUtils');
-      const audioUrl = await textToSpeech(message.content);
-      const audio = new Audio(audioUrl);
-      audio.onended = () => URL.revokeObjectURL(audioUrl);
-      await audio.play();
-    } catch (error) {
-      console.error('Error speaking message:', error);
-    }
-  },
-  
-  speakConversation: async () => {
-    const { messages } = get();
-    try {
-      const { textToSpeech } = await import('@/utils/elevenlabsUtils');
-      const conversationText = messages.map(m => `${m.sender}: ${m.content}`).join('\n');
-      const audioUrl = await textToSpeech(conversationText);
-      const audio = new Audio(audioUrl);
-      audio.onended = () => URL.revokeObjectURL(audioUrl);
-      await audio.play();
-    } catch (error) {
-      console.error('Error speaking conversation:', error);
-    }
-  }
-}));
+  // New action to set the message input
+  setMessageInput: (input) => set({ messageInput: input }),
+})); 
 
 export default useChatStore; // Export the useChatStore hook
