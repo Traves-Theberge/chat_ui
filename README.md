@@ -53,11 +53,6 @@ src/
 ┃ ┗ page.jsx
 ┣ components/
 ┃ ┣ sidebar/
-┃ ┃ ┣ promptTemplates/
-┃ ┃ ┃ ┣ overview.mdx
-┃ ┃ ┃ ┣ PlaceholderFillModal.jsx
-┃ ┃ ┃ ┣ PromptTemplateButton.jsx
-┃ ┃ ┃ ┗ PromptTemplateModal.jsx
 ┃ ┃ ┣ SidebarButton.jsx
 ┃ ┃ ┣ SidebarChatItem.jsx
 ┃ ┃ ┣ SidebarChatList.jsx
@@ -130,7 +125,7 @@ src/
 - **Create Chat**: Click the "+" button in the sidebar to start a new chat session.
 - **Select Model**: Choose an AI model from the dropdown in the chat header.
 - **Send Message**: Type your message in the input bar and press Enter to send.
-- **Upload File**: Click the paperclip icon to upload and include files in your messages.
+messages.
 - **Use Emojis**: Click the emoji icon to open the emoji picker and add emojis to your messages.
 - **Delete Chat**: Click the trash icon next to a chat in the sidebar to delete it.
 
@@ -142,7 +137,6 @@ Create a `.env.local` file with the following variables:
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-MISTRAL_API_KEY=your_mistral_api_key
 OPENAI_API_KEY=your_openai_api_key
 ```
 
