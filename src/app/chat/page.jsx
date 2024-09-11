@@ -80,11 +80,17 @@ export default function ChatPage() {
     setContext([...context, newContext]);
   }, [context, setContext]);
 
+  const onChatDelete = useCallback((deletedChatId) => {
+    useChatStore.getState().clearMessages();
+    useChatStore.getState().fetchChats();
+  }, []);
+
   return (
     <div className="flex h-screen overflow-hidden bg-navy">
       <Sidebar 
         setCurrentChat={setCurrentChat} 
         currentChat={currentChat} 
+        onChatDelete={onChatDelete}
       />
       <div className="flex flex-col flex-grow overflow-hidden">
         <ChatHeader currentChat={currentChat} />

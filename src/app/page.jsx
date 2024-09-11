@@ -72,8 +72,8 @@ export default function HomePage() {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-bold mb-2">Welcome to Chat UI</h1>
-          <p className="text-light-gray">Your AI-powered conversation companion</p>
+          <h1 className="text-4xl font-bold mb-2">LonestarAI</h1>
+          <p className="text-light-gray">AI-powered conversation companion</p>
         </motion.div>
         <motion.div
           initial={{ y: 50, opacity: 0 }}

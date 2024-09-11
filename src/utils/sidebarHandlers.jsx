@@ -49,16 +49,30 @@ export const handleCreateChat = async (newChatName, chats, setCurrentChat, setIs
 
 export const handleDeleteChat = async (chatId, fetchChats, setCurrentChat, currentChat, onChatDelete) => {
   try {
-    const { error } = await supabase.from('chat_sessions').delete().eq('id', chatId);
+    // Attempt to delete the chat
+    const { error, data } = await supabase
+      .from('chat_sessions')
+      .delete()
+      .eq('id', chatId)
+      .select();
+
     if (error) {
+      console.error('Error deleting chat session:', error);
       toast.error('Error deleting chat session: ' + error.message);
-    } else {
+      return;
+    }
+
+    // Check if the chat was actually deleted
+    if (data && data.length > 0) {
       await fetchChats(); // Fetch updated chats after deleting one
       if (currentChat === chatId) {
         setCurrentChat(null); // Reset current chat if it was deleted
         onChatDelete(chatId); // Clear the messages for the deleted chat
       }
       toast.success('Chat session deleted successfully');
+    } else {
+      console.error('Chat not found or already deleted');
+      toast.warning('Chat not found or already deleted');
     }
   } catch (error) {
     console.error('Unexpected error during chat deletion:', error);
