@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import AuthModal from '@/components/AuthModal';
 import useAuth from '@/hooks/useAuth';
 import supabase from '@/utils/supabaseClient';
+import Image from 'next/image';
 
 // Define the home page component
 export default function HomePage() {
@@ -66,15 +67,16 @@ export default function HomePage() {
       className={`flex items-center justify-center min-h-screen bg-navy text-light-gray p-4`}
     >
       <div className="w-full max-w-md">
-        <motion.div
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <h1 className="text-4xl font-bold mb-2 font-sans">LonestarAI</h1>
-          <p className="text-light-gray font-sans font-light">AI-powered conversation companion</p>
-        </motion.div>
+        <div className="text-center mb-8">
+          <Image
+            src="/6446aa0f3ea6fc51c7c3cd24_Lonestar Solar Services Logo-p-1600.png"
+            alt="Lonestar Solar Services Logo"
+            width={400}
+            height={200}
+            className="mx-auto mb-4"
+          />
+          <p className="text-light-gray font-sans font-light">AI-powered Sales Training companion</p>
+        </div>
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
