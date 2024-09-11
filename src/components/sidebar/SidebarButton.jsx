@@ -8,7 +8,7 @@ const SidebarButton = ({ onClick, icon, text, isCollapsed, className }) => {
     <motion.button
       layout
       onClick={onClick}
-      className={`w-full ${className} text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} h-10`}
+      className={`w-full ${className} text-light-gray font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} h-10`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       initial={false}

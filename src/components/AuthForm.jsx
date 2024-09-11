@@ -1,94 +1,81 @@
 "use client";
 
-// Import necessary hooks from React
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// AuthForm component definition
 export default function AuthForm({ isSignup, handleSubmit }) {
-  // State to manage email input
   const [email, setEmail] = useState('');
-  // State to manage password input
   const [password, setPassword] = useState('');
-  // State to manage feedback messages
   const [feedback, setFeedback] = useState('');
 
-  // Function to handle form submission
   const onSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    setFeedback(''); // Clear any existing feedback messages
+    event.preventDefault();
+    setFeedback('');
     if (typeof handleSubmit !== 'function') {
-      // Check if handleSubmit is a function
-      console.error('handleSubmit is not a function'); // Log error if handleSubmit is not a function
-      setFeedback('An error occurred. Please try again.'); // Set feedback message
-      return; // Exit the function
+      console.error('handleSubmit is not a function');
+      setFeedback('An error occurred. Please try again.');
+      return;
     }
     try {
-      // Attempt to call handleSubmit with email and password
       await handleSubmit(email, password);
     } catch (error) {
-      // Catch any errors during handleSubmit
-      setFeedback(error.message); // Set feedback message to error message
-      console.error('Auth error:', error); // Log the error
+      setFeedback(error.message);
+      console.error('Auth error:', error);
     }
   };
 
-  // Animation variants for input fields
   const inputVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 20 } }
   };
 
-  // Animation variants for the submit button
   const buttonVariants = {
     hover: { scale: 1.05 },
     tap: { scale: 0.95 }
   };
 
-  // Animation variants for the form
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
     exit: { opacity: 0, y: 50, transition: { duration: 0.5 } }
   };
 
-  // JSX for the AuthForm component
   return (
     <motion.div
       variants={formVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="bg-navy bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl p-8 w-full max-w-md"
+      className="bg-navy rounded-lg shadow-xl p-8 w-full max-w-md"
     >
       <motion.h2
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="text-4xl mb-6 text-white font-bold text-center"
+        className="text-4xl mb-6 text-light-gray font-bold text-center"
       >
         {isSignup ? 'Sign Up' : 'Login'}
       </motion.h2>
-      <form onSubmit={onSubmit} className="space-y-6 bg-gray-800 p-8 rounded-lg">
+      <form onSubmit={onSubmit} className="space-y-6 bg-[#1A1A1A] p-8 rounded-lg">
         <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-4">
-          <label htmlFor="email" className="block mb-2 text-gray-300">Email</label>
+          <label htmlFor="email" className="block mb-2 text-light-gray">Email</label>
           <input
             type="email"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="w-full p-3 rounded-lg bg-[#2A2A2A] text-light-gray focus:outline-none focus:ring-2 focus:ring-vibrant-red transition"
           />
         </motion.div>
         <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-6">
-          <label htmlFor="password" className="block mb-2 text-gray-300">Password</label>
+          <label htmlFor="password" className="block mb-2 text-light-gray">Password</label>
           <input
             type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="w-full p-3 rounded-lg bg-[#2A2A2A] text-light-gray focus:outline-none focus:ring-2 focus:ring-vibrant-red transition"
           />
         </motion.div>
         <motion.button
@@ -107,7 +94,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="mt-4 text-red-500 text-center"
+            className="mt-4 text-vibrant-red text-center"
           >
             {feedback}
           </motion.div>

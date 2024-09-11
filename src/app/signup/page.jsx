@@ -47,10 +47,10 @@ export default function SignupPage() {
   }, [session, router]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+    <div className="flex items-center justify-center min-h-screen bg-navy text-light-gray p-4">
       <div className="w-full max-w-md">
         <AuthForm isSignup={true} handleSubmit={handleSignup} isLoading={isLoading} />
-        {feedback && <div className="mt-4 text-red-500 text-center">{feedback}</div>}
+        {feedback && <div className="mt-4 text-vibrant-red text-center">{feedback}</div>}
       </div>
     </div>
   );

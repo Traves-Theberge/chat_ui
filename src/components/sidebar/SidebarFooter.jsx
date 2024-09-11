@@ -12,14 +12,14 @@ const SidebarFooter = ({ isCollapsed, handleOpenNewChatModal, handleLogout }) =>
         icon={faPlus}
         text="New Chat"
         isCollapsed={isCollapsed}
-        className="bg-blue-500 hover:bg-blue-600"
+        className="bg-blue-500 hover:bg-blue-600 text-light-gray"
       />
       <SidebarButton
         onClick={handleLogout}
         icon={faSignOutAlt}
         text="Logout"
         isCollapsed={isCollapsed}
-        className="bg-red-500 hover:bg-red-600"
+        className="bg-red-500 hover:bg-red-600 text-light-gray"
       />
     </div>
   );

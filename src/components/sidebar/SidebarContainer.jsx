@@ -62,7 +62,7 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete, isM
   };
 
   return (
-    <div className={`bg-navy text-light-gray flex flex-col h-full transition-all duration-300 ease-in-out ${
+    <div className={`bg-navy text-light-gray flex flex-col h-full transition-all duration-300 ease-in-out border-r border-light-gray border-opacity-20 ${
       isCollapsed ? 'w-16' : 'w-64'
     }`}>
       <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />

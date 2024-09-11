@@ -27,12 +27,12 @@ export default function ModelSelector() {
     <select 
       value={model} 
       onChange={handleModelChange} 
-      className="bg-gray-800 text-white rounded-lg p-2 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+      className="bg-gray-800 text-light-gray rounded-lg p-2 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-vibrant-red transition duration-200"
     >
       {Object.entries(models).map(([provider, modelOptions]) => (
         <optgroup key={provider} label={provider} className="bg-gray-700">
           {modelOptions.map((modelOption) => (
-            <option key={modelOption} value={modelOption} className="bg-gray-800">
+            <option key={modelOption} value={modelOption} className="bg-gray-800 text-light-gray">
               {modelOption} {/* Display model option */}
             </option>
           ))}

@@ -197,7 +197,7 @@ function MessageBubble({ message, isGrouped }) {
       <div className="absolute top-2 right-2">
         <motion.button
           onClick={() => setShowMenu(!showMenu)}
-          className="text-xs p-2 rounded-full"
+          className="text-xs p-2 rounded-full text-light-gray"
           style={{ backgroundColor: 'transparent' }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -208,7 +208,7 @@ function MessageBubble({ message, isGrouped }) {
           {showMenu && (
             <motion.div
               ref={menuRef}
-              className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5"
+              className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-navy ring-1 ring-white ring-opacity-5" // Added white outline
               style={{
                 zIndex: 10,
                 top: '100%',
@@ -222,14 +222,14 @@ function MessageBubble({ message, isGrouped }) {
               <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                 <button
                   onClick={handleCopy}
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
+                  className="flex items-center px-4 py-2 text-sm text-light-gray hover:bg-vibrant-red hover:bg-opacity-20 w-full text-left"
                   role="menuitem"
                 >
                   <FontAwesomeIcon icon={faCopy} className="mr-3" /> Copy
                 </button>
                 <button
                   onClick={handleDelete}
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
+                  className="flex items-center px-4 py-2 text-sm text-light-gray hover:bg-vibrant-red hover:bg-opacity-20 w-full text-left"
                   role="menuitem"
                 >
                   <FontAwesomeIcon icon={faTrash} className="mr-3" /> Delete
