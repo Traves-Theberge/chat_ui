@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce'; // Import the debounce function from Lod
 import EmojiPicker, { Theme } from 'emoji-picker-react'; // Import the EmojiPicker component and Theme
 import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence from Framer Motion
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSmile, faPaperclip, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { faSmile, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import useChatStore from '@/store/chatStore';
 
 // Define the MessageInput component
@@ -19,7 +19,6 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
   const [showPicker, setShowPicker] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const textareaRef = useRef(null);
-  const fileInputRef = useRef(null);
   const emojiPickerRef = useRef(null);
   const menuRef = useRef(null);
   const [notification, setNotification] = useState(null);
@@ -85,19 +84,6 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
     }, 0);
   };
 
-  // Function to handle file upload
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target.result;
-        setMessageInput(String(content)); // Ensure it's a string
-      };
-      reader.readAsText(file);
-    }
-  };
-
   useEffect(() => {
     function handleClickOutside(event) {
       if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
@@ -157,26 +143,10 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
                   <FontAwesomeIcon icon={faSmile} className="mr-2" />
                   Emoji
                 </button>
-                <button
-                  onClick={() => {
-                    fileInputRef.current?.click();
-                    setShowMenu(false);
-                  }}
-                  className="flex items-center w-full px-4 py-2 text-left text-white hover:bg-gray-700 rounded-md transition-colors"
-                >
-                  <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
-                  Attach File
-                </button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileUpload}
-          style={{ display: 'none' }}
-        />
         <AnimatePresence>
           {showPicker && (
             <motion.div

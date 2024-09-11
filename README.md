@@ -1,16 +1,13 @@
-# Chat UI
+LonestarAI Sales Coach is an advanced AI-powered chat application built on Next.js, designed to train and assist new employees in door-to-door sales. It leverages Supabase for user authentication, data management, and real-time messaging, while utilizing OpenAI's GPT models for generating AI-powered responses.
 
-This chat application is built on Next.js and incorporates AI capabilities. It leverages Supabase for user authentication, data management, and real-time messaging. OpenAI is utilized for response generation.
+🔑 **Setup Required: Add API Keys for OpenAI & Configure Supabase**
 
-🔑 **Just Add API Keys for Open AI & Set Up Supabase**
-
-
-🚨 **Disclaimer**
+## Disclaimer
 
 This project is for educational and demonstration purposes only. It is not intended for production use without proper security measures and compliance with applicable laws and regulations. The use of AI models and third-party services may be subject to their respective terms of service and privacy policies.
 
+## Table of Contents
 
-- [Disclaimer](#disclaimer)
 - [Features](#features)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
@@ -23,14 +20,13 @@ This project is for educational and demonstration purposes only. It is not inten
 - [API Routes](#api-routes)
 - [Contributing](#contributing)
 - [License](#license)
-- [TO DO](#to-do)
 
 ## Features
 
 - User authentication (signup, login, and logout) with Supabase
-- Real-time messaging with AI models
+- Real-time messaging with AI-powered responses
 - Chat session management (create, read, and delete chats)
-- AI-powered chat responses using GPT-4 Mini
+- AI-powered chat responses using GPT-4o Mini
 - Markdown support in chat messages, including code syntax highlighting
 - Emoji picker integration
 - File upload functionality
@@ -39,6 +35,9 @@ This project is for educational and demonstration purposes only. It is not inten
 - Improved loading states for better user feedback
 - Smoother animations for message additions and removals
 - Responsive design for mobile and desktop
+- User progress tracking and context-aware responses
+- Guided learning paths for sales training
+- Ethical considerations in sales coaching
 
 ## Project Structure
 ```
@@ -70,32 +69,20 @@ src/
 ┃ ┣ AuthModal.jsx
 ┃ ┣ ChatHeader.jsx
 ┃ ┣ ChatMessages.jsx
-┃ ┣ MessageInput.jsx
-┃ ┗ ModelSelector.jsx
-┣ hooks/
-┃ ┗ useAuth.jsx
-┣ middleware/
-┃ ┗ auth.jsx
+┃ ┗ MessageInput.jsx
 ┣ pages/
 ┃ ┣ api/
-┃ ┃ ┣ mistral.jsx
-┃ ┃ ┣ openai.jsx
-┃ ┃ ┗ upload.jsx
-┃ ┣ _app.jsx
-┃ ┗ _document.jsx
+┃ ┃ ┗ openai.jsx
 ┣ store/
-┃ ┣ chatStore.jsx
-┃ ┗ promptTemplateStore.js
+┃ ┗ chatStore.jsx
+┣ utils/
+┃ ┣ apiUtils.js
+┃ ┣ modelClients.jsx
+┃ ┗ supabaseClient.js
 ┣ styles/
 ┃ ┗ globals.css
-┣ uploads/
-┃ ┗ file.example
-┗ utils/
-  ┣ apiUtils.js
-  ┣ modelClients.jsx
-  ┣ promptTemplates.js
-  ┣ sidebarHandlers.jsx
-  ┗ supabaseClient.jsx
+┗ middleware/
+┗ auth.jsx
   .env.local
   .eslintrc.json
   .gitignore
@@ -146,34 +133,7 @@ src/
 - **Upload File**: Click the paperclip icon to upload and include files in your messages.
 - **Use Emojis**: Click the emoji icon to open the emoji picker and add emojis to your messages.
 - **Delete Chat**: Click the trash icon next to a chat in the sidebar to delete it.
-- **Download Chat History**: Click the "Download Chat" button in the chat header to download the chat history in various formats.
-- **Prompt Templates**: Click the "Prompt Templates" button in the sidebar to access the Prompt Templates modal.
-- **Apply Template**: Select a template and fill in any placeholders in the PlaceholderFillModal. This modal allows you to input text for placeholders marked as `{{placeholder_name}}` in the template content.
-- **File Placeholders**: For placeholders marked as `{{file_reference}}`, you can upload text-based files. The content of the uploaded file will replace the placeholder in the template. Supported file formats include .txt, .html, .css, .js, .json, .xml, and .md.
 
-## Prompt Templates
-
-The Prompt Templates feature allows users to create, manage, and apply pre-defined text structures to their messages. This enhances the chat experience by providing quick access to commonly used prompts and allowing for customization through placeholders.
-
-### How to Use:
-
-1. Click the "Prompt Templates" button in the sidebar.
-2. In the modal, you can:
-   - Select an existing template
-   - Create a new template
-   - Edit or delete existing templates
-3. When applying a template with placeholders, fill in the required information in the PlaceholderFillModal.
-4. The filled template will be inserted into your message input.
-
-### Placeholder Types:
-
-- Basic placeholders: `{{placeholder_name}}`
-- File placeholders: Allows uploading text-based files
-
-### Performance Considerations:
-
-- Templates are stored in the database and fetched on-demand to reduce initial load time.
-- File uploads for placeholders are handled asynchronously to prevent UI blocking.
 
 ## Environment Variables
 
@@ -212,42 +172,10 @@ CREATE TABLE IF NOT EXISTS conversations (
     created_at timestamp with time zone DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS prompt_templates (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name text NOT NULL,
-    content text NOT NULL,
-    created_at timestamp with time zone DEFAULT now(),
-    updated_at timestamp with time zone DEFAULT now()
-);
-
--- Create an index on the name column for faster lookups
-CREATE INDEX IF NOT EXISTS idx_prompt_templates_name ON prompt_templates(name);
-
--- Create a trigger to update the updated_at column
-CREATE OR REPLACE FUNCTION update_modified_column()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = now();
-    RETURN NEW;
-END;
-$$ language 'plpgsql';
-
-CREATE TRIGGER IF NOT EXISTS update_prompt_templates_modtime
-BEFORE UPDATE ON prompt_templates
-FOR EACH ROW
-EXECUTE FUNCTION update_modified_column();
 ```
 
 These SQL commands will create the necessary tables for users, chat sessions, and conversations in your Supabase database.
 
-## Performance Considerations
-
-- Debouncing is used for certain operations like message fetching to prevent excessive API calls.
-- React's `useMemo` and `useCallback` are utilized in components for optimization.
-- The sidebar is collapsible to improve UI performance on mobile devices.
-- File uploads are handled asynchronously to prevent UI blocking.
-- Templates are stored in the database and fetched on-demand to reduce initial load time.
-- File uploads for placeholders are handled asynchronously to prevent UI blocking.
 
 ## Error Handling and Notifications
 
@@ -264,7 +192,6 @@ This project relies on several key dependencies to provide its functionality:
 - **Next.js**: ^14.2.5
 - **Supabase**: ^2.44.4
 - **OpenAI**: ^4.53.2
-- **Mistral AI**: ^0.5.0
 - **Framer Motion**: ^11.3.19
 - **React Markdown**: ^9.0.1
 - **React Syntax Highlighter**: ^15.5.0
@@ -284,8 +211,7 @@ For a complete list of dependencies and their versions, please refer to the `pac
 The application includes API routes for interacting with AI models:
 
 - `/api/openai.jsx`: Handles requests to the OpenAI API
-- `/api/mistral.jsx`: Handles requests to the Mistral AI API
-- `/api/upload.jsx`: Handles file uploads
+
 
 These routes are used to securely communicate with external AI services and manage file uploads.
 

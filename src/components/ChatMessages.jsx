@@ -5,7 +5,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faCopy, faTrash, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faCopy, faTrash } from '@fortawesome/free-solid-svg-icons';
 import useChatStore from '@/store/chatStore';
 
 export default function ChatMessages({ messages, isLoading, isAiResponding }) {
@@ -116,7 +116,6 @@ function MessageBubble({ message, isGrouped }) {
   const menuRef = useRef(null);
   const deleteMessage = useChatStore(state => state.deleteMessage);
   const copyMessage = useChatStore(state => state.copyMessage);
-  const downloadMessage = useChatStore(state => state.downloadMessage);
 
   const processedContent = useMemo(() => {
     if (message.file) {
@@ -145,11 +144,6 @@ function MessageBubble({ message, isGrouped }) {
 
   const handleCopy = () => {
     copyMessage(message);
-    setShowMenu(false);
-  };
-
-  const handleDownload = () => {
-    downloadMessage(message);
     setShowMenu(false);
   };
 

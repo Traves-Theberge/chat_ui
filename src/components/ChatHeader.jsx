@@ -8,7 +8,6 @@ export default function ChatHeader({ currentChat }) {
     <div className="bg-gray-900 text-white p-4 shadow-md flex items-center justify-between flex-wrap">
       <h2 className="text-xl font-semibold">Chat Session</h2>
       <div className="flex items-center space-x-4 mt-2 sm:mt-0">
-        <span>GPT-4 Mini</span>
       </div>
     </div>
   );

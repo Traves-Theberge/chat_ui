@@ -162,45 +162,6 @@ const useChatStore = create((set, get) => ({
     navigator.clipboard.writeText(message.content);
   },
   
-  downloadMessage: (message, format = 'txt') => {
-    const { prepareDownload } = get();
-    const { url, filename } = prepareDownload(format, [message]);
-    const element = document.createElement('a');
-    element.href = url;
-    element.download = filename;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  },
-  
-  prepareDownload: (format = 'txt', messagesToDownload = null) => {
-    const { messages, currentChat } = get();
-    const messagesToUse = messagesToDownload || messages;
-    let content, mimeType, extension;
-  
-    switch (format) {
-      case 'json':
-        content = JSON.stringify(messagesToUse, null, 2);
-        mimeType = 'application/json';
-        extension = 'json';
-        break;
-      case 'csv':
-        content = 'Sender,Content,Timestamp\n' + 
-          messagesToUse.map(msg => `"${msg.sender}","${msg.content}","${msg.created_at}"`).join('\n');
-        mimeType = 'text/csv';
-        extension = 'csv';
-        break;
-      default:
-        content = messagesToUse.map(msg => `${msg.sender} (${new Date(msg.created_at).toLocaleString()}):\n${msg.content}\n`).join('\n');
-        mimeType = 'text/plain';
-        extension = 'txt';
-    }
-  
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    return { url, filename: `chat_history_${currentChat}.${extension}` };
-  },
-  
   subscribeToMessages: (chatId) => {
     const channel = supabase
       .channel(`public:conversations:session_id=eq.${chatId}`)
