@@ -7,9 +7,6 @@ import SidebarChatList from './SidebarChatList';
 import SidebarFooter from './SidebarFooter';
 import SidebarNewChatModal from './SidebarNewChatModal';
 import { handleDeleteChat, handleLogout } from '@/utils/sidebarHandlers';
-import PromptTemplateButton from './promptTemplates/PromptTemplateButton';
-import PromptTemplateModal from './promptTemplates/PromptTemplateModal';
-import { fillTemplatePlaceholders } from '@/utils/apiUtils';
 
 export default function Sidebar({ setCurrentChat, currentChat, onChatDelete, isMessageLoading }) {
   const { chats, fetchChats } = useChatStore((state) => ({ 
@@ -20,7 +17,6 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete, isM
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newChatName, setNewChatName] = useState('');
-  const [isPromptTemplateModalOpen, setIsPromptTemplateModalOpen] = useState(false);
 
   useEffect(() => {
     const loadChats = async () => {
@@ -57,36 +53,29 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete, isM
       console.error('Error creating chat:', error);
       if (error.message === 'A chat with this name already exists') {
         toast.error('A chat with this name already exists. Please choose a different name.');
+      } else if (error.message === 'Network Error') {
+        toast.error('Unable to create chat due to network issues. Please try again later.');
       } else {
-        toast.error(`Failed to create chat: ${error.message}`);
+        toast.error('An unexpected error occurred. Please try again.');
       }
     }
   };
 
-  const handleOpenPromptTemplateModal = () => setIsPromptTemplateModalOpen(true);
-  const handleClosePromptTemplateModal = () => setIsPromptTemplateModalOpen(false);
-
-  const handleApplyTemplate = (filledTemplate) => {
-    const { setMessageInput } = useChatStore.getState();
-    setMessageInput(filledTemplate);
-  };
-
   return (
-    <div className={`bg-gray-900 text-white flex flex-col transition-all duration-300 ease-in-out ${
+    <div className={`bg-gray-900 text-white flex flex-col h-full transition-all duration-300 ease-in-out ${
       isCollapsed ? 'w-16' : 'w-64'
     }`}>
       <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      <SidebarChatList 
-        isLoading={isLoading}
-        isCollapsed={isCollapsed}
-        chats={chats}
-        currentChat={currentChat}
-        setCurrentChat={setCurrentChat}
-        handleDeleteChat={(chatId) => handleDeleteChat(chatId, fetchChats, setCurrentChat, currentChat, onChatDelete)}
-        isMessageLoading={isMessageLoading}
-      />
-      <div className="mt-auto p-4">
-        <PromptTemplateButton onClick={handleOpenPromptTemplateModal} isCollapsed={isCollapsed} />
+      <div className="flex-grow overflow-y-auto">
+        <SidebarChatList 
+          isLoading={isLoading}
+          isCollapsed={isCollapsed}
+          chats={chats}
+          currentChat={currentChat}
+          setCurrentChat={setCurrentChat}
+          handleDeleteChat={(chatId) => handleDeleteChat(chatId, fetchChats, setCurrentChat, currentChat, onChatDelete)}
+          isMessageLoading={isMessageLoading}
+        />
       </div>
       <SidebarFooter 
         isCollapsed={isCollapsed}
@@ -99,11 +88,6 @@ export default function Sidebar({ setCurrentChat, currentChat, onChatDelete, isM
         newChatName={newChatName}
         setNewChatName={setNewChatName}
         handleCreateChat={handleCreateChat}
-      />
-      <PromptTemplateModal
-        isOpen={isPromptTemplateModalOpen}
-        onClose={handleClosePromptTemplateModal}
-        onApplyTemplate={handleApplyTemplate}
       />
     </div>
   );

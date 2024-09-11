@@ -8,8 +8,12 @@ const SidebarNewChatModal = ({ isOpen, onClose, newChatName, setNewChatName, han
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleCreateChat();
+      handleCreateChat(newChatName);
     }
+  };
+
+  const handleCreate = () => {
+    handleCreateChat(newChatName);
   };
 
   return (
@@ -44,7 +48,7 @@ const SidebarNewChatModal = ({ isOpen, onClose, newChatName, setNewChatName, han
                 className="w-full p-3 border text-white bg-gray-700 border-gray-600 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <motion.button
-                onClick={handleCreateChat}
+                onClick={handleCreate}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center"

@@ -13,14 +13,6 @@ export default function ModelSelector() {
       'gpt-4o-mini', // 128,000 tokens	Up to Oct 2023
       'gpt-4-turbo', // 128,000 tokens	Up to Dec 2023
       'gpt-3.5-turbo' // 16,385 tokens	Up to Sep 2021
-    ],
-    Mistral: [
-      'mistral-tiny-latest', // 128,000 tokens
-      'mistral-small-latest', // 128,000 tokens
-      'mistral-medium-latest', // 128,000 tokens
-      'mistral-large-latest', // 128,000 tokens
-      'open-mistral-nemo', // 128,000 tokens
-      'codestral-latest', // 32,000 tokens
     ]
   };
 

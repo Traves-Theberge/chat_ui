@@ -1,89 +1,116 @@
-import { create } from 'zustand'; // Import the create function from 'zustand' for state management
-import supabase from '@/utils/supabaseClient'; // Import the Supabase client from the utility file
+import { create } from 'zustand';
+import supabase from '@/utils/supabaseClient';
 
-// Define the useChatStore hook using create from 'zustand'
 const useChatStore = create((set, get) => ({
-  // Initial state properties
-  currentChat: null, // The current chat session ID
-  messages: [], // Array to hold chat messages
-  chats: [], // Array to hold chat sessions
-  model: 'gpt-4o-mini', // The model for chat interactions
-  messageInput: '', // New state for the message input
-  applyTemplate: null, // New state for the applied template
-  selectedTemplate: null, // New state for the selected template
+  currentChat: null,
+  messages: [],
+  chats: [],
+  messageInput: '',
   
-  // Action to set the current chat session ID
   setCurrentChat: (chatId) => set({ currentChat: chatId }),
-  // Action to set the model for chat interactions
-  setModel: (model) => set({ model }), // Updated to set the model
   
-  // Function to fetch messages for a given chat session
   fetchMessages: async (chatId) => {
     try {
-      // Query Supabase for messages related to the given chat session
       const { data, error } = await supabase
         .from('conversations')
         .select('*')
         .eq('session_id', chatId)
         .order('created_at', { ascending: true });
-      if (error) throw error; // Throw the error if there's an issue with the query
-      // Update the state with the fetched messages
+      if (error) throw error;
       set({ messages: data || [] });
     } catch (error) {
-      console.error('Error fetching messages:', error); // Log the error if it occurs
+      console.error('Error fetching messages:', error);
     }
   },
   
-  // Function to fetch all chat sessions
   fetchChats: async () => {
     try {
-      // Query Supabase for all chat sessions
       const { data, error } = await supabase
         .from('chat_sessions')
         .select('*')
         .order('created_at', { ascending: false });
-      if (error) throw error; // Throw the error if there's an issue with the query
-      // Update the state with the fetched chat sessions
+      if (error) throw error;
       set({ chats: data || [] });
     } catch (error) {
-      console.error('Error fetching chats:', error); // Log the error if it occurs
+      console.error('Error fetching chats:', error);
     }
   },
   
-  // Function to send a new message
   sendMessage: async (message) => {
     const { currentChat } = get();
-    const { data, error } = await supabase
-      .from('conversations')
-      .insert({ ...message, session_id: currentChat })
-      .single();
+    try {
+      console.log('Sending message:', message);
+      
+      // Insert message into Supabase
+      const { data, error } = await supabase
+        .from('conversations')
+        .insert(message)
+        .select();
 
-    if (error) {
+      if (error) throw error;
+
+      // If the message is from the user, get AI response
+      if (message.sender === 'user') {
+        const response = await fetch('/api/openai', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: message.content,
+            chatId: currentChat,
+            model: 'gpt-4o-mini',
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('AI response received:', result);
+
+        // Create and insert AI message
+        const aiMessage = {
+          content: result,
+          sender: 'assistant',
+          session_id: currentChat,
+          created_at: new Date().toISOString()
+        };
+
+        await supabase
+          .from('conversations')
+          .insert(aiMessage);
+
+        // No need to update local state here, as it's handled by the subscription
+      }
+
+      return data[0];
+    } catch (error) {
       console.error('Error sending message:', error);
+      throw error;
     }
   },
   
-  // Function to clear all messages from the state
+  addMessage: (message) => {
+    set((state) => ({
+      messages: [...state.messages, message]
+    }));
+  },
+  
   clearMessages: () => set({ messages: [] }),
   
-  // Function to update the state directly
   set: (fn) => set(fn),
   
-  // Function to add a new chat session to the state
   addChat: (newChat) => set((state) => {
-    // Check if the new chat session already exists in the state
     if (!state.chats.some(chat => chat.id === newChat.id)) {
-      // If it doesn't exist, add it to the beginning of the chats array
       return { chats: [newChat, ...state.chats] };
     }
-    // If it already exists, return the current state
     return state;
   }),
   
-  // Function to create a new chat session
   createChat: async (chatName) => {
     try {
-      // Check if a chat with the same name already exists
       const { data: existingChats, error: fetchError } = await supabase
         .from('chat_sessions')
         .select('id')
@@ -111,11 +138,9 @@ const useChatStore = create((set, get) => ({
     }
   },
   
-  // Updated deleteMessage function
   deleteMessage: async (messageId) => {
     const { messages, currentChat } = get();
     try {
-      // Delete the message from Supabase
       const { error } = await supabase
         .from('conversations')
         .delete()
@@ -123,19 +148,16 @@ const useChatStore = create((set, get) => ({
 
       if (error) throw error;
 
-      // Update the local state
       set({ messages: messages.filter(msg => msg.id !== messageId) });
     } catch (error) {
       console.error('Error deleting message:', error);
     }
   },
   
-  // Function to copy a message
   copyMessage: (message) => {
     navigator.clipboard.writeText(message.content);
   },
   
-  // Function to download a message
   downloadMessage: (message, format = 'txt') => {
     const { prepareDownload } = get();
     const { url, filename } = prepareDownload(format, [message]);
@@ -147,7 +169,6 @@ const useChatStore = create((set, get) => ({
     document.body.removeChild(element);
   },
   
-  // Updated prepareDownload function to handle single message
   prepareDownload: (format = 'txt', messagesToDownload = null) => {
     const { messages, currentChat } = get();
     const messagesToUse = messagesToDownload || messages;
@@ -176,7 +197,6 @@ const useChatStore = create((set, get) => ({
     return { url, filename: `chat_history_${currentChat}.${extension}` };
   },
   
-  // New function to subscribe to real-time message updates
   subscribeToMessages: (chatId) => {
     const channel = supabase
       .channel(`public:conversations:session_id=eq.${chatId}`)
@@ -187,6 +207,7 @@ const useChatStore = create((set, get) => ({
           set((state) => ({
             messages: [...state.messages, payload.new]
           }));
+          console.log('New message received:', payload.new);
         }
       )
       .subscribe();
@@ -196,15 +217,13 @@ const useChatStore = create((set, get) => ({
     };
   },
   
-  // New function to clear pending responses
   clearPendingResponse: (chatId) => {
     set((state) => ({
       messages: state.messages.filter(msg => msg.session_id !== chatId || msg.status !== 'pending')
     }));
   },
   
-  // New action to set the message input
   setMessageInput: (input) => set({ messageInput: input }),
-})); 
+}));
 
-export default useChatStore; // Export the useChatStore hook
+export default useChatStore;

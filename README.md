@@ -1,8 +1,8 @@
 # Chat UI
 
-This chat application is built on Next.js and incorporates AI capabilities. It leverages Supabase for user authentication, data management, and real-time messaging. OpenAI and Mistral AI are utilized for response generation and can be selected interchangeably in the chat.
+This chat application is built on Next.js and incorporates AI capabilities. It leverages Supabase for user authentication, data management, and real-time messaging. OpenAI is utilized for response generation.
 
-🔑 **Just Add API Keys for Open AI, Mistral & Set Up Supabase**
+🔑 **Just Add API Keys for Open AI & Set Up Supabase**
 
 
 🚨 **Disclaimer**
@@ -15,7 +15,6 @@ This project is for educational and demonstration purposes only. It is not inten
 - [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Prompt Templates](#prompt-templates)
 - [Environment Variables](#environment-variables)
 - [Database Setup](#database-setup)
 - [Performance Considerations](#performance-considerations)
@@ -31,27 +30,15 @@ This project is for educational and demonstration purposes only. It is not inten
 - User authentication (signup, login, and logout) with Supabase
 - Real-time messaging with AI models
 - Chat session management (create, read, and delete chats)
-- Model selection for different AI interactions
-- Support for multiple AI models:
-  - OpenAI models: GPT-4o, GPT-3.5-turbo, GPT-4-turbo, GPT-4o-mini (default)
-  - Mistral models: mistral-tiny-latest, mistral-small-latest, mistral-medium-latest, mistral-large-latest, 
-  open-mistral-nemo, codestral-latest
+- AI-powered chat responses using GPT-4 Mini
 - Markdown support in chat messages, including code syntax highlighting
 - Emoji picker integration
 - File upload functionality
-- Prompt templates for quick message generation
-    - Placeholder system for dynamic content in templates
-    - File upload support for placeholders
 - Chat history download in multiple formats (TXT, JSON, CSV)
 - Real-time typing indicators
 - Improved loading states for better user feedback
 - Smoother animations for message additions and removals
-- AI-powered chat responses from OpenAI and Mistral AI
-- Customizable prompt templates
-- File uploads and sharing
-- Message editing and deletion with real-time updates
 - Responsive design for mobile and desktop
-- Manage chat logs with options to delete, copy, and download individual messages or the entire chat history in .json, .csv, and .txt formats
 
 ## Project Structure
 ```

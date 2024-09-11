@@ -11,11 +11,9 @@ import useChatStore from '@/store/chatStore';
 
 // Define the MessageInput component
 export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding }) {
-  const { messageInput, setMessageInput, applyTemplate, setApplyTemplate } = useChatStore(state => ({
+  const { messageInput, setMessageInput } = useChatStore(state => ({
     messageInput: state.messageInput,
-    setMessageInput: state.setMessageInput,
-    applyTemplate: state.applyTemplate,
-    setApplyTemplate: state.setApplyTemplate
+    setMessageInput: state.setMessageInput
   }));
 
   const [showPicker, setShowPicker] = useState(false);
@@ -24,7 +22,6 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
   const fileInputRef = useRef(null);
   const emojiPickerRef = useRef(null);
   const menuRef = useRef(null);
-  const [templatePreview, setTemplatePreview] = useState(null);
   const [notification, setNotification] = useState(null);
 
   // Debounced function to send the message with a delay to prevent rapid-fire messages
@@ -41,7 +38,6 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
     if (typeof messageInput === 'string' && messageInput.trim()) {
       debouncedSendMessage(messageInput);
       setMessageInput('');
-      setTemplatePreview(null);
     }
   };
 
@@ -121,18 +117,6 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
     };
   }, []);
 
-  useEffect(() => {
-    if (applyTemplate && typeof applyTemplate === 'string') {
-      console.log('Applying template:', applyTemplate);
-      setMessageInput(prevInput => prevInput + applyTemplate);
-      setTemplatePreview(applyTemplate);
-      setApplyTemplate(null);
-      adjustTextareaHeight();
-      setNotification('Template applied successfully');
-      setTimeout(() => setNotification(null), 3000);
-    }
-  }, [applyTemplate, setMessageInput, setApplyTemplate]);
-
   // JSX for the MessageInput component
   return (
     <motion.form
@@ -211,12 +195,6 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
             </motion.div>
           )}
         </AnimatePresence>
-        {templatePreview && (
-          <div className="mb-2 p-2 bg-gray-700 rounded-md text-sm text-gray-300">
-            <p className="font-semibold">Template Preview:</p>
-            <p>{templatePreview}</p>
-          </div>
-        )}
         <motion.textarea
           ref={textareaRef}
           value={messageInput || ''} // Ensure it's always a string

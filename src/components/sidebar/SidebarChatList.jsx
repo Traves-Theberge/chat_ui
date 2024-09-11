@@ -8,7 +8,9 @@ const SidebarChatList = ({ isLoading, isCollapsed, chats, currentChat, setCurren
     <div className="flex-grow overflow-y-auto">
       <div className="p-4 space-y-2">
         {isLoading ? (
-          <p className="text-gray-400">Loading chat sessions...</p>
+          <div className="flex justify-center items-center h-20">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
         ) : Array.isArray(chats) && chats.length > 0 ? (
           <AnimatePresence>
             {chats.map((chat) => (

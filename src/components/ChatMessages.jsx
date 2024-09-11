@@ -28,35 +28,35 @@ export default function ChatMessages({ messages, isLoading, isAiResponding }) {
     }
   }, [currentChat, fetchMessages, subscribeToMessages, clearPendingResponse]);
 
-  const [groupedMessages, setGroupedMessages] = useState([]);
-  const messagesEndRef = useRef(null);
-
-  useEffect(() => {
-    const groupMessages = () => {
-      const grouped = [];
-      let currentGroup = [];
-      messages.forEach((message, index) => {
-        if (index === 0 || message.sender !== messages[index - 1].sender) {
-          if (currentGroup.length > 0) {
-            grouped.push(currentGroup);
-          }
-          currentGroup = [message];
-        } else {
-          currentGroup.push(message);
+  const groupedMessages = useMemo(() => {
+    const grouped = [];
+    let currentGroup = [];
+    messages.forEach((message, index) => {
+      if (index === 0 || message.sender !== messages[index - 1].sender) {
+        if (currentGroup.length > 0) {
+          grouped.push(currentGroup);
         }
-      });
-      if (currentGroup.length > 0) {
-        grouped.push(currentGroup);
+        currentGroup = [message];
+      } else {
+        currentGroup.push(message);
       }
-      setGroupedMessages(grouped);
-    };
-
-    groupMessages();
+    });
+    if (currentGroup.length > 0) {
+      grouped.push(currentGroup);
+    }
+    return grouped;
   }, [messages]);
+
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [groupedMessages, isAiResponding]);
+
+  useEffect(() => {
+    console.log('Messages in ChatMessages:', messages);
+    console.log('Grouped messages:', groupedMessages);
+  }, [messages, groupedMessages]);
 
   return (
     <div className="flex flex-col flex-grow overflow-y-auto p-4 overflow-x-hidden">
@@ -239,13 +239,6 @@ function MessageBubble({ message, isGrouped }) {
                   role="menuitem"
                 >
                   <FontAwesomeIcon icon={faTrash} className="mr-3" /> Delete
-                </button>
-                <button
-                  onClick={handleDownload}
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
-                  role="menuitem"
-                >
-                  <FontAwesomeIcon icon={faDownload} className="mr-3" /> Download
                 </button>
               </div>
             </motion.div>

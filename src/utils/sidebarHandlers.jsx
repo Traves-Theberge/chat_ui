@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import useChatStore from '@/store/chatStore';
 
 export const handleCreateChat = async (newChatName, chats, setCurrentChat, setIsModalOpen, setNewChatName) => {
-  if (!newChatName.trim()) return;
+  if (!newChatName || !newChatName.trim()) return;
 
   try {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
