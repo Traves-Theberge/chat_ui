@@ -13,7 +13,7 @@ const SidebarChatItem = ({ chat, isCollapsed, isActive, onClick, onDelete, isDis
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
       onClick={isDisabled ? undefined : onClick}
-      className={`p-2 rounded-lg cursor-pointer transition duration-200 flex justify-between items-center h-10 
+      className={`p-2 rounded-lg cursor-pointer transition duration-200 flex justify-between items-center h-12 
         ${isActive 
           ? 'bg-vibrant-red text-light-gray' 
           : 'bg-navy hover:bg-opacity-80 text-light-gray'
@@ -29,8 +29,9 @@ const SidebarChatItem = ({ chat, isCollapsed, isActive, onClick, onDelete, isDis
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.2 }}
+            className="w-full h-full flex items-center justify-center"
           >
-            <FontAwesomeIcon icon={faComment} className="mx-auto text-lg" />
+            <FontAwesomeIcon icon={faComment} className="text-xl" />
           </motion.div>
         ) : (
           <motion.div

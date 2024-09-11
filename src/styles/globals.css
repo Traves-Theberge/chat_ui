@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 body {
-  @apply bg-navy text-light-gray font-sans;
+  @apply bg-navy text-light-gray;
 }
 
 ::-webkit-scrollbar {
@@ -77,12 +77,12 @@ body {
 }
 
 .custom-toast {
-  background-color: #3b82f6 !important; /* blue-500 */
-  color: white !important;
+  background-color: #0D0D0D !important; /* navy */
+  color: #FFFFFF !important; /* light-gray */
 }
 
 .custom-toast-progress-bar {
-  background-color: #1d4ed8 !important; /* blue-700 */
+  background-color: #F03535 !important; /* vibrant-red */
 }
 
 .button {

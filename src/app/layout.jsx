@@ -17,8 +17,8 @@ export default function RootLayout({ children }) {
         {children}
         <ToastContainer 
           position="top-center" 
-          toastClassName="bg-navy text-light-gray"
-          progressClassName="bg-vibrant-red"
+          toastClassName="custom-toast"
+          progressClassName="custom-toast-progress-bar"
         />
       </body>
     </html>
