@@ -115,6 +115,8 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
         <motion.button
           type="button"
           onClick={() => setShowMenu(!showMenu)}
+          aria-label="Open menu"
+          aria-expanded={showMenu}
           className="flex items-center justify-center w-10 h-10 text-light-gray hover:text-white transition-colors rounded-full bg-vibrant-red bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-offset-2 focus:ring-offset-navy"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -125,6 +127,8 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
           {showMenu && (
             <motion.div
               ref={menuRef}
+              role="menu"
+              aria-label="Message options"
               className="absolute left-0 bottom-full mb-2 bg-navy rounded-lg shadow-lg z-10"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -137,7 +141,8 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
                     setShowPicker(!showPicker);
                     setShowMenu(false);
                   }}
-                  className="flex items-center w-full px-4 py-2 text-left text-light-gray hover:bg-vibrant-red hover:bg-opacity-20 rounded-md transition-colors"
+                  role="menuitem"
+                  className="flex items-center w-full px-4 py-2 text-left text-light-gray hover:bg-vibrant-red hover:bg-opacity-20 rounded-md transition-colors outline outline-1 outline-white focus:outline-2 focus:outline-offset-2"
                 >
                   <FontAwesomeIcon icon={faSmile} className="mr-2" />
                   Emoji
@@ -164,12 +169,15 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
             </motion.div>
           )}
         </AnimatePresence>
+        <label htmlFor="message-input" className="sr-only">Type your message</label>
         <motion.textarea
+          id="message-input"
           ref={textareaRef}
           value={messageInput || ''} // Ensure it's always a string
           onChange={(e) => setMessageInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-grow p-3 bg-navy border border-light-gray border-opacity-20 text-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-vibrant-red transition duration-200 resize-none"
+          aria-label="Type your message"
+          className="flex-grow p-3 bg-navy border border-light-gray border-opacity-20 text-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-vibrant-red transition duration-200 resize-none font-sans"
           placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
           rows={1}
           style={{ maxHeight: '200px' }}
@@ -179,6 +187,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
         />
         <motion.button
           type="submit"
+          aria-label={isAiResponding ? "AI is responding" : "Send message"}
           className={`bg-vibrant-red hover:bg-opacity-80 text-light-gray rounded-full p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-vibrant-red ${
             isAiResponding ? 'opacity-50 cursor-not-allowed' : ''
           }`}
@@ -193,7 +202,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
             />
           ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           )}

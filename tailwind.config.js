@@ -10,7 +10,16 @@ module.exports = {
         'vibrant-red': '#F03535',
         'light-gray': '#FFFFFF',
       },
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addBase, theme }) {
+      addBase({
+        'body': { fontFamily: theme('fontFamily.sans') },
+      })
+    }
+  ],
 }

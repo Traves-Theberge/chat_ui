@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 body {
-  @apply bg-navy text-light-gray;
+  @apply bg-navy text-light-gray font-sans;
 }
 
 ::-webkit-scrollbar {
