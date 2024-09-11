@@ -13,9 +13,13 @@ const SidebarChatItem = ({ chat, isCollapsed, isActive, onClick, onDelete, isDis
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
       onClick={isDisabled ? undefined : onClick}
-      className={`p-2 rounded-lg cursor-pointer transition duration-200 flex justify-between items-center h-10 ${
-        isActive ? 'bg-vibrant-red text-light-gray' : 'bg-navy hover:bg-opacity-80'
-      } ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      className={`p-2 rounded-lg cursor-pointer transition duration-200 flex justify-between items-center h-10 
+        ${isActive 
+          ? 'bg-vibrant-red text-light-gray' 
+          : 'bg-navy hover:bg-opacity-80 text-light-gray'
+        } 
+        ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}
+        border border-light-gray border-opacity-20`}
     >
       <AnimatePresence mode="wait">
         {isCollapsed ? (
@@ -45,7 +49,7 @@ const SidebarChatItem = ({ chat, isCollapsed, isActive, onClick, onDelete, isDis
                 e.stopPropagation();
                 onDelete();
               }}
-              className="text-gray-400 hover:text-red-400 transition duration-200 ml-2"
+              className="text-light-gray hover:text-vibrant-red transition duration-200 ml-2"
             >
               <FontAwesomeIcon icon={faTrash} />
             </motion.button>
