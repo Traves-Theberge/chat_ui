@@ -6,6 +6,8 @@ const useChatStore = create((set, get) => ({
   messages: [],
   chats: [],
   messageInput: '',
+  userProgress: {},
+  context: [],
   
   setCurrentChat: (chatId) => set({ currentChat: chatId }),
   
@@ -37,7 +39,7 @@ const useChatStore = create((set, get) => ({
   },
   
   sendMessage: async (message) => {
-    const { currentChat } = get();
+    const { currentChat, userProgress, context } = get();
     try {
       console.log('Sending message:', message);
       
@@ -60,6 +62,8 @@ const useChatStore = create((set, get) => ({
             message: message.content,
             chatId: currentChat,
             model: 'gpt-4o-mini',
+            context: context,
+            userProgress: userProgress,
           }),
         });
 
@@ -224,6 +228,8 @@ const useChatStore = create((set, get) => ({
   },
   
   setMessageInput: (input) => set({ messageInput: input }),
+  setUserProgress: (progress) => set({ userProgress: progress }),
+  setContext: (newContext) => set({ context: newContext }),
 }));
 
 export default useChatStore;

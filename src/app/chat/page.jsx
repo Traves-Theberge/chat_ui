@@ -20,7 +20,11 @@ export default function ChatPage() {
     fetchMessages, 
     currentChat, 
     setCurrentChat,
-    sendMessage
+    sendMessage,
+    userProgress,
+    setUserProgress,
+    context,
+    setContext
   } = useChatStore();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -67,6 +71,15 @@ export default function ChatPage() {
       setIsAiResponding(false);
     }
   }, [currentChat, sendMessage]);
+
+  // Add functions to update user progress and context
+  const updateUserProgress = useCallback((newProgress) => {
+    setUserProgress({ ...userProgress, ...newProgress });
+  }, [userProgress, setUserProgress]);
+
+  const updateContext = useCallback((newContext) => {
+    setContext([...context, newContext]);
+  }, [context, setContext]);
 
   return (
     <div className="flex h-screen overflow-hidden">
