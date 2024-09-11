@@ -59,7 +59,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl p-8 w-full max-w-md"
+      className="bg-navy bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl p-8 w-full max-w-md"
     >
       <motion.h2
         initial={{ opacity: 0 }}
@@ -96,7 +96,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
           variants={buttonVariants}
           whileHover="hover"
           whileTap="tap"
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-light-gray bg-vibrant-red hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-red"
         >
           {isSignup ? 'Sign Up' : 'Login'}
         </motion.button>

@@ -42,7 +42,7 @@ export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md relative overflow-hidden`}
+            className={`bg-navy rounded-lg shadow-xl p-8 w-full max-w-md relative overflow-hidden`}
           >
             <motion.button 
               className={`absolute top-6 right-6 text-gray-300 hover:text-white transition-colors z-10 p-4 rounded-full bg-gray-700 bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-white`}

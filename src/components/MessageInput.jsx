@@ -10,7 +10,7 @@ import { faSmile, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import useChatStore from '@/store/chatStore';
 
 // Define the MessageInput component
-export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding }) {
+export default function MessageInput({ onSendMessage, isAiResponding }) {
   const { messageInput, setMessageInput } = useChatStore(state => ({
     messageInput: state.messageInput,
     setMessageInput: state.setMessageInput
@@ -21,7 +21,6 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
   const textareaRef = useRef(null);
   const emojiPickerRef = useRef(null);
   const menuRef = useRef(null);
-  const [notification, setNotification] = useState(null);
 
   // Debounced function to send the message with a delay to prevent rapid-fire messages
   const debouncedSendMessage = useCallback(
@@ -107,26 +106,26 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
   return (
     <motion.form
       onSubmit={handleSubmit}
-      className="p-4 border-t border-gray-700"
+      className="p-4 border-t border-light-gray border-opacity-20 bg-navy"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-<div className="relative flex items-center space-x-3">
-  <motion.button
-    type="button"
-    onClick={() => setShowMenu(!showMenu)}
-    className="flex items-center justify-center w-10 h-10 text-gray-300 hover:text-white transition-colors rounded-full bg-gray-700 bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    <FontAwesomeIcon icon={faEllipsisV} className="h-5 w-5" />
-  </motion.button>
+      <div className="relative flex items-center space-x-3">
+        <motion.button
+          type="button"
+          onClick={() => setShowMenu(!showMenu)}
+          className="flex items-center justify-center w-10 h-10 text-light-gray hover:text-white transition-colors rounded-full bg-vibrant-red bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-offset-2 focus:ring-offset-navy"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <FontAwesomeIcon icon={faEllipsisV} className="h-5 w-5" />
+        </motion.button>
         <AnimatePresence>
           {showMenu && (
             <motion.div
               ref={menuRef}
-              className="absolute left-0 bottom-full mb-2 bg-gray-800 rounded-lg shadow-lg z-10"
+              className="absolute left-0 bottom-full mb-2 bg-navy rounded-lg shadow-lg z-10"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
@@ -138,7 +137,7 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
                     setShowPicker(!showPicker);
                     setShowMenu(false);
                   }}
-                  className="flex items-center w-full px-4 py-2 text-left text-white hover:bg-gray-700 rounded-md transition-colors"
+                  className="flex items-center w-full px-4 py-2 text-left text-light-gray hover:bg-vibrant-red hover:bg-opacity-20 rounded-md transition-colors"
                 >
                   <FontAwesomeIcon icon={faSmile} className="mr-2" />
                   Emoji
@@ -170,7 +169,7 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
           value={messageInput || ''} // Ensure it's always a string
           onChange={(e) => setMessageInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-grow p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none"
+          className="flex-grow p-3 bg-navy border border-light-gray border-opacity-20 text-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-vibrant-red transition duration-200 resize-none"
           placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
           rows={1}
           style={{ maxHeight: '200px' }}
@@ -180,7 +179,7 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
         />
         <motion.button
           type="submit"
-          className={`bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          className={`bg-vibrant-red hover:bg-opacity-80 text-light-gray rounded-full p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-vibrant-red ${
             isAiResponding ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           whileHover={{ scale: isAiResponding ? 1 : 1.05 }}
@@ -189,7 +188,7 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
         >
           {isAiResponding ? (
             <motion.div
-              className="w-6 h-6 border-t-2 border-b-2 border-white rounded-full"
+              className="w-6 h-6 border-t-2 border-b-2 border-light-gray rounded-full"
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
             />
@@ -200,11 +199,6 @@ export default function MessageInput({ onSendMessage, isDarkMode, isAiResponding
           )}
         </motion.button>
       </div>
-      {notification && (
-        <div className="absolute bottom-full left-0 mb-2 p-2 bg-green-500 text-white rounded-md">
-          {notification}
-        </div>
-      )}
     </motion.form>
   );
 }

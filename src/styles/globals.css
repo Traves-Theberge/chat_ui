@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 body {
-  @apply bg-gray-900 text-white;
+  @apply bg-navy text-light-gray;
 }
 
 ::-webkit-scrollbar {
@@ -11,15 +11,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-800;
+  @apply bg-navy;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-600 rounded-full;
+  @apply bg-vibrant-red bg-opacity-50 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-500;
+  @apply bg-vibrant-red;
 }
 
 .my-custom-modal {

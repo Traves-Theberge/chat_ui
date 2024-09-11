@@ -6,7 +6,6 @@ import Sidebar from '@/components/sidebar/SidebarContainer';
 import ChatHeader from '@/components/ChatHeader';
 import ChatMessages from '@/components/ChatMessages';
 import MessageInput from '@/components/MessageInput';
-import initializeModels from '@/utils/modelClients';
 import useChatStore from '@/store/chatStore';
 import useAuth from '@/hooks/useAuth';
 import { toast } from 'react-toastify';
@@ -82,14 +81,14 @@ export default function ChatPage() {
   }, [context, setContext]);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-navy">
       <Sidebar 
         setCurrentChat={setCurrentChat} 
         currentChat={currentChat} 
       />
       <div className="flex flex-col flex-grow overflow-hidden">
         <ChatHeader currentChat={currentChat} />
-        <div className="flex-grow overflow-y-auto bg-gray-800">
+        <div className="flex-grow overflow-y-auto bg-navy">
           <ChatMessages 
             messages={messages} 
             isLoading={isLoading} 

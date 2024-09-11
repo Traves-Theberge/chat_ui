@@ -59,10 +59,10 @@ export default function ChatMessages({ messages, isLoading, isAiResponding }) {
   }, [messages, groupedMessages]);
 
   return (
-    <div className="flex flex-col flex-grow overflow-y-auto p-4 overflow-x-hidden">
+    <div className="flex flex-col flex-grow overflow-y-auto p-4 overflow-x-hidden bg-navy">
       {isLoading && (
         <div className="flex items-center justify-center h-full">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-400" />
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-vibrant-red" />
         </div>
       )}
       <AnimatePresence>
@@ -84,7 +84,7 @@ export default function ChatMessages({ messages, isLoading, isAiResponding }) {
           transition={{ duration: 0.3 }}
           className="flex justify-start mb-4"
         >
-          <div className="bg-gray-700 text-white rounded-lg p-3">
+          <div className="bg-navy border border-light-gray border-opacity-20 text-light-gray rounded-lg p-3">
             <div className="typing-indicator">
               <span></span>
               <span></span>
@@ -154,8 +154,8 @@ function MessageBubble({ message, isGrouped }) {
       transition={{ duration: 0.3 }}
       className={`relative max-w-full md:max-w-2xl lg:max-w-3xl xl:max-w-4xl rounded-2xl p-6 
         ${message.sender === 'user' 
-          ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white self-end' 
-          : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white self-start'} 
+          ? 'bg-vibrant-red text-light-gray self-end' 
+          : 'bg-navy border border-light-gray border-opacity-20 text-light-gray self-start'} 
         shadow-lg 
         ${isGrouped ? 'mt-2' : 'mt-4'}`}
     >
