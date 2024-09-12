@@ -1,26 +1,39 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function AuthForm({ isSignup, handleSubmit }) {
+export default function AuthForm({ 
+  isSignup, 
+  handleSubmit, 
+  handlePasswordReset, 
+  isLoading, 
+  rememberMe, 
+  setRememberMe, 
+  feedback 
+}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [feedback, setFeedback] = useState('');
+  const [showResetPassword, setShowResetPassword] = useState(false);
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    setFeedback('');
-    if (typeof handleSubmit !== 'function') {
-      console.error('handleSubmit is not a function');
-      setFeedback('An error occurred. Please try again.');
-      return;
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
     }
-    try {
-      await handleSubmit(email, password);
-    } catch (error) {
-      setFeedback(error.message);
-      console.error('Auth error:', error);
+  }, []);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (showResetPassword) {
+      if (typeof handlePasswordReset === 'function') {
+        handlePasswordReset(email);
+      } else {
+        console.error('handlePasswordReset is not a function');
+      }
+    } else {
+      handleSubmit(email, password);
     }
   };
 
@@ -55,7 +68,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
       >
         {isSignup ? 'Sign Up' : 'Login'}
       </motion.h2>
-      <form onSubmit={onSubmit} className="space-y-6 bg-[#1A1A1A] p-8 rounded-lg">
+      <form onSubmit={onSubmit} className="space-y-4 bg-[#1A1A1A] p-8 rounded-lg">
         <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-4">
           <label htmlFor="email" className="block mb-2 text-light-gray">Email</label>
           <input
@@ -67,17 +80,19 @@ export default function AuthForm({ isSignup, handleSubmit }) {
             className="w-full p-3 rounded-lg bg-[#2A2A2A] text-light-gray focus:outline-none focus:ring-2 focus:ring-vibrant-red transition"
           />
         </motion.div>
-        <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-6">
-          <label htmlFor="password" className="block mb-2 text-light-gray">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full p-3 rounded-lg bg-[#2A2A2A] text-light-gray focus:outline-none focus:ring-2 focus:ring-vibrant-red transition"
-          />
-        </motion.div>
+        {!showResetPassword && (
+          <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-6">
+            <label htmlFor="password" className="block mb-2 text-light-gray">Password</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg bg-[#2A2A2A] text-light-gray focus:outline-none focus:ring-2 focus:ring-vibrant-red transition"
+            />
+          </motion.div>
+        )}
         <motion.button
           type="submit"
           variants={buttonVariants}
@@ -85,7 +100,7 @@ export default function AuthForm({ isSignup, handleSubmit }) {
           whileTap="tap"
           className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-light-gray bg-vibrant-red hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-red"
         >
-          {isSignup ? 'Sign Up' : 'Login'}
+          {isLoading ? 'Processing...' : (showResetPassword ? 'Reset Password' : (isSignup ? 'Sign Up' : 'Login'))}
         </motion.button>
       </form>
       <AnimatePresence>
@@ -100,6 +115,31 @@ export default function AuthForm({ isSignup, handleSubmit }) {
           </motion.div>
         )}
       </AnimatePresence>
+      {!isSignup && (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={(e) => {
+                if (typeof setRememberMe === 'function') {
+                  setRememberMe(e.target.checked);
+                }
+              }}
+              className="mr-2"
+            />
+            <label htmlFor="rememberMe" className="text-sm text-light-gray">Remember me</label>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowResetPassword(!showResetPassword)}
+            className="text-sm text-vibrant-red hover:underline"
+          >
+            {showResetPassword ? 'Back to Login' : 'Forgot Password?'}
+          </button>
+        </div>
+      )}
     </motion.div>
   );
 }

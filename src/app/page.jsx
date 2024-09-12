@@ -75,7 +75,7 @@ export default function HomePage() {
             height={200}
             className="mx-auto mb-4"
           />
-          <p className="text-light-gray font-sans font-light">AI-powered Sales Training companion</p>
+          <p className="text-light-gray font-sans font-light">AI-Powered Sales Training Companion</p>
         </div>
         <motion.div
           initial={{ y: 50, opacity: 0 }}
