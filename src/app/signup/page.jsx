@@ -3,7 +3,7 @@
 // Import necessary hooks and components
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthForm from '@/components/AuthForm';
+import AuthModal from '@/components/AuthModal';
 import useAuth from '@/hooks/useAuth';
 import supabase from '@/utils/supabaseClient';
 
@@ -12,6 +12,8 @@ export default function SignupPage() {
   const [feedback, setFeedback] = useState('');
   // State to manage loading state
   const [isLoading, setIsLoading] = useState(false);
+  // State to manage modal visibility
+  const [isModalVisible, setIsModalVisible] = useState(true);
   // Router instance from Next.js
   const router = useRouter();
   const { session } = useAuth();
@@ -40,6 +42,12 @@ export default function SignupPage() {
     }
   };
 
+  // Function to handle modal closing
+  const closeModal = () => {
+    setIsModalVisible(false);
+    router.push('/');
+  };
+
   useEffect(() => {
     if (session) {
       router.push('/chat');
@@ -48,10 +56,13 @@ export default function SignupPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-navy text-light-gray p-4">
-      <div className="w-full max-w-md">
-        <AuthForm isSignup={true} handleSubmit={handleSignup} isLoading={isLoading} />
-        {feedback && <div className="mt-4 text-vibrant-red text-center">{feedback}</div>}
-      </div>
+      <AuthModal 
+        isSignup={true} 
+        isVisible={isModalVisible} 
+        closeModal={closeModal} 
+        onSuccess={handleSignup}
+      />
+      {feedback && <div className="mt-4 text-vibrant-red text-center">{feedback}</div>}
     </div>
   );
 }

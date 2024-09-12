@@ -117,7 +117,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
           onClick={() => setShowMenu(!showMenu)}
           aria-label="Open menu"
           aria-expanded={showMenu}
-          className="flex items-center justify-center w-10 h-10 text-light-gray hover:text-white transition-colors rounded-full bg-vibrant-red bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-offset-2 focus:ring-offset-navy"
+          className="flex items-center justify-center w-10 h-10 text-light-gray hover:text-white transition-colors rounded-none bg-vibrant-red bg-opacity-60 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-offset-2 focus:ring-offset-navy"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -129,7 +129,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
               ref={menuRef}
               role="menu"
               aria-label="Message options"
-              className="absolute left-0 bottom-full mb-2 bg-navy rounded-lg shadow-lg z-10"
+              className="absolute left-0 bottom-full mb-2 bg-navy rounded-none shadow-lg z-10"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
@@ -142,7 +142,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
                     setShowMenu(false);
                   }}
                   role="menuitem"
-                  className="flex items-center w-full px-4 py-2 text-left text-light-gray hover:bg-vibrant-red hover:bg-opacity-20 rounded-md transition-colors outline outline-1 outline-white focus:outline-2 focus:outline-offset-2"
+                  className="flex items-center w-full px-4 py-2 text-left text-light-gray hover:bg-vibrant-red hover:bg-opacity-20 rounded-none transition-colors outline outline-1 outline-white focus:outline-2 focus:outline-offset-2"
                 >
                   <FontAwesomeIcon icon={faSmile} className="mr-2" />
                   Emoji
@@ -177,7 +177,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
           onChange={(e) => setMessageInput(e.target.value)}
           onKeyDown={handleKeyDown}
           aria-label="Type your message"
-          className="flex-grow p-3 bg-navy border border-light-gray border-opacity-20 text-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-vibrant-red transition duration-200 resize-none font-sans"
+          className="flex-grow p-3 bg-navy border border-light-gray border-opacity-20 text-light-gray rounded-none focus:outline-none focus:ring-2 focus:ring-vibrant-red transition duration-200 resize-none font-sans"
           placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
           rows={1}
           style={{ maxHeight: '200px' }}
@@ -188,7 +188,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
         <motion.button
           type="submit"
           aria-label={isAiResponding ? "AI is responding" : "Send message"}
-          className={`bg-vibrant-red hover:bg-opacity-80 text-light-gray rounded-full p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-vibrant-red ${
+          className={`bg-vibrant-red hover:bg-opacity-80 text-light-gray rounded-none p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-vibrant-red ${
             isAiResponding ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           whileHover={{ scale: isAiResponding ? 1 : 1.05 }}

@@ -9,6 +9,7 @@ import AuthModal from '@/components/AuthModal';
 import useAuth from '@/hooks/useAuth';
 import supabase from '@/utils/supabaseClient';
 import Image from 'next/image';
+import { RotatingLines } from "react-loader-spinner";
 
 // Define the home page component
 export default function HomePage() {
@@ -30,9 +31,19 @@ export default function HomePage() {
     }
   }, [session, loading, router]);
 
-  // Render a loading message if the auth hook is still loading
+  // Render a loading spinner if the auth hook is still loading
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <RotatingLines
+          strokeColor="grey"
+          strokeWidth="5"
+          animationDuration="0.75"
+          width="96"
+          visible={true}
+        />
+      </div>
+    );
   }
 
   // Function to close the modals
@@ -81,12 +92,12 @@ export default function HomePage() {
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className={`bg-[#1A1A1A] bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl p-8`}
+          className={`bg-[#1A1A1A] bg-opacity-50 backdrop-blur-lg rounded-none shadow-xl p-8`}
         >
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`w-full p-3 bg-vibrant-red text-light-gray rounded-lg font-semibold mb-4 transition duration-300 ease-in-out transform hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-opacity-50`}
+            className={`w-full py-3 px-4 bg-vibrant-red text-light-gray rounded-none font-semibold mb-4 transition duration-300 ease-in-out transform hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-opacity-50`}
             onClick={() => setIsLoginVisible(true)}
           >
             Login
@@ -94,7 +105,7 @@ export default function HomePage() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`w-full p-3 bg-[#2A2A2A] text-light-gray rounded-lg font-semibold transition duration-300 ease-in-out transform hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-opacity-50`}
+            className={`w-full py-3 px-4 bg-[#2A2A2A] text-light-gray rounded-none font-semibold transition duration-300 ease-in-out transform hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-opacity-50`}
             onClick={() => router.push('/signup')}
           >
             Sign Up

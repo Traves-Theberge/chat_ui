@@ -13,7 +13,7 @@ const SidebarChatItem = ({ chat, isCollapsed, isActive, onClick, onDelete, isDis
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
       onClick={isDisabled ? undefined : onClick}
-      className={`p-2 rounded-lg cursor-pointer transition duration-200 flex justify-between items-center h-12 
+      className={`p-2 rounded-none cursor-pointer transition duration-200 flex justify-between items-center h-12 
         ${isActive 
           ? 'bg-vibrant-red text-light-gray' 
           : 'bg-navy hover:bg-opacity-80 text-light-gray'

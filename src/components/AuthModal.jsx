@@ -37,18 +37,20 @@ export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="bg-navy rounded-lg shadow-xl p-8 w-full max-w-md relative overflow-hidden"
+            className="bg-navy rounded-none shadow-xl p-8 w-full max-w-md relative overflow-hidden"
           >
-            <motion.button 
-              className="absolute top-6 right-6 text-light-gray hover:text-white transition-colors z-10 p-4 rounded-full bg-[#1A1A1A] hover:bg-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-vibrant-red"
-              onClick={closeModal}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.8 }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </motion.button>
+            <div className="absolute top-6 right-6 flex space-x-2">
+              <motion.button 
+                className="text-light-gray hover:text-white transition-colors z-10 p-2 rounded-none bg-[#1A1A1A] hover:bg-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-vibrant-red"
+                onClick={closeModal}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </motion.button>
+            </div>
             <AuthForm isSignup={isSignup} handleSubmit={onSuccess} />
           </motion.div>
         </motion.div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function AuthForm({ 
   isSignup, 
@@ -15,6 +16,7 @@ export default function AuthForm({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showResetPassword, setShowResetPassword] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const rememberedEmail = localStorage.getItem('rememberedEmail');
@@ -98,10 +100,15 @@ export default function AuthForm({
           variants={buttonVariants}
           whileHover="hover"
           whileTap="tap"
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-light-gray bg-vibrant-red hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-red"
+          className="w-full py-3 px-4 border border-transparent rounded-none shadow-sm text-sm font-medium text-light-gray bg-vibrant-red hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-red"
         >
           {isLoading ? 'Processing...' : (showResetPassword ? 'Reset Password' : (isSignup ? 'Sign Up' : 'Login'))}
         </motion.button>
+
+        {isSignup && (
+          <div className="mt-4 text-center">
+          </div>
+        )}
       </form>
       <AnimatePresence>
         {feedback && (
