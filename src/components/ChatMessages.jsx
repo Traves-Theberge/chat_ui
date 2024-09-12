@@ -188,7 +188,7 @@ function MessageBubble({ message, isGrouped }) {
       </ReactMarkdown>
       <div className="flex justify-between items-center mt-3">
         <p className="text-xs opacity-70 mr-2">
-          {message.sender === 'user' ? 'You' : 'AI'}
+          {message.sender === 'user' ? 'You' : 'LonestarAI'}
         </p>
         <p className="text-xs opacity-70 ml-2">
           {new Date(message.created_at).toLocaleTimeString()}
@@ -201,6 +201,9 @@ function MessageBubble({ message, isGrouped }) {
           style={{ backgroundColor: 'transparent' }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
+          aria-label="Message options"
+          aria-haspopup="true"
+          aria-expanded={showMenu}
         >
           <FontAwesomeIcon icon={faEllipsisV} />
         </motion.button>
@@ -208,7 +211,7 @@ function MessageBubble({ message, isGrouped }) {
           {showMenu && (
             <motion.div
               ref={menuRef}
-              className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-navy ring-1 ring-white ring-opacity-5" // Added white outline
+              className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-navy ring-1 ring-white ring-opacity-5"
               style={{
                 zIndex: 10,
                 top: '100%',
@@ -218,8 +221,11 @@ function MessageBubble({ message, isGrouped }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.1 }}
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
             >
-              <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+              <div className="py-1" role="none">
                 <button
                   onClick={handleCopy}
                   className="flex items-center px-4 py-2 text-sm text-light-gray hover:bg-vibrant-red hover:bg-opacity-20 w-full text-left"

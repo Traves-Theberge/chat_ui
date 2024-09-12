@@ -72,7 +72,7 @@ export default function LoginPage() {
 
   // Render the login page
   return (
-    <div className="flex items-center justify-center min-h-screen bg-navy text-light-gray p-4">
+    <div className="flex items-center justify-center min-h-screen bg-navy text-light-gray p-4" role="main" aria-label="Login page">
       <div className="w-full max-w-md">
         <AuthForm 
           isSignup={false} 

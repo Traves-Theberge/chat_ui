@@ -31,6 +31,9 @@ export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-md flex items-center justify-center z-50 p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
         >
           <motion.div
             variants={modalVariants}
@@ -45,12 +48,14 @@ export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }
                 onClick={closeModal}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Close modal"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </motion.button>
             </div>
+            <h2 id="modal-title" className="sr-only">{isSignup ? 'Sign Up' : 'Login'}</h2>
             <AuthForm isSignup={isSignup} handleSubmit={onSuccess} />
           </motion.div>
         </motion.div>

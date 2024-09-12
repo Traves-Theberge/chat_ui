@@ -67,10 +67,11 @@ export default function AuthForm({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="text-4xl mb-6 text-light-gray font-bold text-center"
+        id="form-title"
       >
         {isSignup ? 'Sign Up' : 'Login'}
       </motion.h2>
-      <form onSubmit={onSubmit} className="space-y-4 bg-[#1A1A1A] p-8 rounded-lg">
+      <form onSubmit={onSubmit} className="space-y-4 bg-[#1A1A1A] p-8 rounded-lg" aria-labelledby="form-title">
         <motion.div variants={inputVariants} initial="hidden" animate="visible" className="mb-4">
           <label htmlFor="email" className="block mb-2 text-light-gray">Email</label>
           <input
@@ -80,6 +81,7 @@ export default function AuthForm({
             onChange={(e) => setEmail(e.target.value)}
             required
             className="w-full p-3 rounded-lg bg-[#2A2A2A] text-light-gray focus:outline-none focus:ring-2 focus:ring-vibrant-red transition"
+            aria-required="true"
           />
         </motion.div>
         {!showResetPassword && (
@@ -92,6 +94,7 @@ export default function AuthForm({
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full p-3 rounded-lg bg-[#2A2A2A] text-light-gray focus:outline-none focus:ring-2 focus:ring-vibrant-red transition"
+              aria-required="true"
             />
           </motion.div>
         )}
@@ -101,14 +104,10 @@ export default function AuthForm({
           whileHover="hover"
           whileTap="tap"
           className="w-full py-3 px-4 border border-transparent rounded-none shadow-sm text-sm font-medium text-light-gray bg-vibrant-red hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-red"
+          aria-label={isLoading ? 'Processing' : (showResetPassword ? 'Reset Password' : (isSignup ? 'Sign Up' : 'Login'))}
         >
           {isLoading ? 'Processing...' : (showResetPassword ? 'Reset Password' : (isSignup ? 'Sign Up' : 'Login'))}
         </motion.button>
-
-        {isSignup && (
-          <div className="mt-4 text-center">
-          </div>
-        )}
       </form>
       <AnimatePresence>
         {feedback && (
@@ -117,13 +116,14 @@ export default function AuthForm({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className="mt-4 text-vibrant-red text-center"
+            role="alert"
           >
             {feedback}
           </motion.div>
         )}
       </AnimatePresence>
       {!isSignup && (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-4">
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -135,6 +135,7 @@ export default function AuthForm({
                 }
               }}
               className="mr-2"
+              aria-label="Remember me"
             />
             <label htmlFor="rememberMe" className="text-sm text-light-gray">Remember me</label>
           </div>
@@ -142,6 +143,7 @@ export default function AuthForm({
             type="button"
             onClick={() => setShowResetPassword(!showResetPassword)}
             className="text-sm text-vibrant-red hover:underline"
+            aria-label={showResetPassword ? 'Back to Login' : 'Forgot Password'}
           >
             {showResetPassword ? 'Back to Login' : 'Forgot Password?'}
           </button>

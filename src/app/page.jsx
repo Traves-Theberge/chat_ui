@@ -76,18 +76,40 @@ export default function HomePage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       className={`flex items-center justify-center min-h-screen bg-navy text-light-gray p-4`}
+      role="main"
+      aria-label="Home page"
     >
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Image
-            src="/6446aa0f3ea6fc51c7c3cd24_Lonestar Solar Services Logo-p-1600.png"
-            alt="Lonestar Solar Services Logo"
-            width={400}
-            height={200}
-            className="mx-auto mb-4"
-          />
-          <p className="text-light-gray font-sans font-light">AI-Powered Sales Training Companion</p>
-        </div>
+        <motion.div
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <motion.div
+            className="relative inline-block"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Image
+              src="/6446aa0f3ea6fc51c7c3cd24_Lonestar Solar Services Logo-p-1600.png"
+              alt="Lonestar Solar Services Logo"
+              width={400}
+              height={200}
+              className="mx-auto mb-4 z-10 relative"
+              style={{ maxWidth: '100%', height: 'auto' }}
+            />
+            <div className="absolute inset-0 bg-vibrant-red opacity-20 filter blur-xl z-0" aria-hidden="true"></div>
+          </motion.div>
+          <motion.p
+            className="text-light-gray font-sans font-light mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            AI-Powered Sales Training Companion
+          </motion.p>
+        </motion.div>
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -95,18 +117,20 @@ export default function HomePage() {
           className={`bg-[#1A1A1A] bg-opacity-50 backdrop-blur-lg rounded-none shadow-xl p-8`}
         >
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, boxShadow: '0 0 15px rgba(240, 53, 53, 0.5)' }}
             whileTap={{ scale: 0.95 }}
-            className={`w-full py-3 px-4 bg-vibrant-red text-light-gray rounded-none font-semibold mb-4 transition duration-300 ease-in-out transform hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-opacity-50`}
+            className={`w-full py-3 px-4 bg-vibrant-red text-light-gray rounded-none font-semibold mb-4 transition duration-300 ease-in-out transform hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-opacity-50 shadow-md`}
             onClick={() => setIsLoginVisible(true)}
+            aria-label="Open login modal"
           >
             Login
           </motion.button>
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, boxShadow: '0 0 15px rgba(42, 42, 42, 0.5)' }}
             whileTap={{ scale: 0.95 }}
-            className={`w-full py-3 px-4 bg-[#2A2A2A] text-light-gray rounded-none font-semibold transition duration-300 ease-in-out transform hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-opacity-50`}
+            className={`w-full py-3 px-4 bg-[#2A2A2A] text-light-gray rounded-none font-semibold transition duration-300 ease-in-out transform hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-vibrant-red focus:ring-opacity-50 shadow-md`}
             onClick={() => router.push('/signup')}
+            aria-label="Navigate to sign up page"
           >
             Sign Up
           </motion.button>

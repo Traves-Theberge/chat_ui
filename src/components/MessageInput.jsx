@@ -187,7 +187,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
         />
         <motion.button
           type="submit"
-          aria-label={isAiResponding ? "AI is responding" : "Send message"}
+          aria-label={isAiResponding ? "AI is responding, please wait" : "Send message"}
           className={`bg-vibrant-red hover:bg-opacity-80 text-light-gray rounded-none p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-vibrant-red ${
             isAiResponding ? 'opacity-50 cursor-not-allowed' : ''
           }`}

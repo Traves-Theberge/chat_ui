@@ -55,14 +55,14 @@ export default function SignupPage() {
   }, [session, router]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-navy text-light-gray p-4">
+    <div className="flex items-center justify-center min-h-screen bg-navy text-light-gray p-4" role="main" aria-label="Sign up page">
       <AuthModal 
         isSignup={true} 
         isVisible={isModalVisible} 
         closeModal={closeModal} 
         onSuccess={handleSignup}
       />
-      {feedback && <div className="mt-4 text-vibrant-red text-center">{feedback}</div>}
+      {feedback && <div className="mt-4 text-vibrant-red text-center" role="alert">{feedback}</div>}
     </div>
   );
 }
