@@ -49,9 +49,9 @@ const SidebarNewChatModal = ({ isOpen, onClose, newChatName, setNewChatName, han
               />
               <motion.button
                 onClick={handleCreate}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, boxShadow: '0 0 15px rgba(240, 53, 53, 0.5)' }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full bg-vibrant-red hover:bg-[#D02020] text-light-gray font-semibold py-3 px-6 rounded-none transition duration-200 flex items-center justify-center"
+                className="w-full bg-vibrant-red hover:bg-[#D02020] text-light-gray font-semibold py-3 px-6 rounded-none transition-all duration-300 flex items-center justify-center"
               >
                 Create Chat
               </motion.button>

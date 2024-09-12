@@ -45,7 +45,7 @@ export default function AuthForm({
   };
 
   const buttonVariants = {
-    hover: { scale: 1.05 },
+    hover: { scale: 1.05, boxShadow: '0 0 15px rgba(240, 53, 53, 0.5)' },
     tap: { scale: 0.95 }
   };
 
@@ -101,9 +101,9 @@ export default function AuthForm({
         <motion.button
           type="submit"
           variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
-          className="w-full py-3 px-4 border border-transparent rounded-none shadow-sm text-sm font-medium text-light-gray bg-vibrant-red hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-red"
+          whileHover={{ scale: 1.05, boxShadow: '0 0 15px rgba(240, 53, 53, 0.5)' }}
+          whileTap={{ scale: 0.95 }}
+          className="w-full py-3 px-4 border border-transparent rounded-none shadow-sm text-sm font-medium text-light-gray bg-vibrant-red hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-red transition-all duration-300"
           aria-label={isLoading ? 'Processing' : (showResetPassword ? 'Reset Password' : (isSignup ? 'Sign Up' : 'Login'))}
         >
           {isLoading ? 'Processing...' : (showResetPassword ? 'Reset Password' : (isSignup ? 'Sign Up' : 'Login'))}

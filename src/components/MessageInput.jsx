@@ -109,7 +109,7 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
       className="p-4 border-t border-light-gray border-opacity-20 bg-navy"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4, ease: [0.6, -0.05, 0.01, 0.99] }}
     >
       <div className="relative flex items-center space-x-3">
         <motion.button
@@ -188,10 +188,10 @@ export default function MessageInput({ onSendMessage, isAiResponding }) {
         <motion.button
           type="submit"
           aria-label={isAiResponding ? "AI is responding, please wait" : "Send message"}
-          className={`bg-vibrant-red hover:bg-opacity-80 text-light-gray rounded-none p-3 transition duration-200 focus:outline-none focus:ring-2 focus:ring-vibrant-red ${
+          className={`bg-vibrant-red hover:bg-opacity-80 text-light-gray rounded-none p-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-vibrant-red ${
             isAiResponding ? 'opacity-50 cursor-not-allowed' : ''
           }`}
-          whileHover={{ scale: isAiResponding ? 1 : 1.05 }}
+          whileHover={{ scale: isAiResponding ? 1 : 1.05, boxShadow: '0 0 15px rgba(240, 53, 53, 0.5)' }}
           whileTap={{ scale: isAiResponding ? 1 : 0.95 }}
           disabled={isAiResponding}
         >

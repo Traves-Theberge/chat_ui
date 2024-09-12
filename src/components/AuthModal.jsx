@@ -18,9 +18,25 @@ export default function AuthModal({ isSignup, isVisible, closeModal, onSuccess }
   }, [isVisible]);
 
   const modalVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: 'easeOut' } },
-    exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3, ease: 'easeIn' } }
+    hidden: { opacity: 0, scale: 0.9, y: -20 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.4, 
+        ease: [0.6, -0.05, 0.01, 0.99] 
+      } 
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 0.9, 
+      y: 20, 
+      transition: { 
+        duration: 0.3, 
+        ease: [0.6, -0.05, 0.01, 0.99] 
+      } 
+    }
   };
 
   return (

@@ -99,7 +99,7 @@ export default function HomePage() {
               className="mx-auto mb-4 z-10 relative"
               style={{ maxWidth: '100%', height: 'auto' }}
             />
-            <div className="absolute inset-0 bg-vibrant-red opacity-20 filter blur-xl z-0" aria-hidden="true"></div>
+            <div className="absolute inset-0 bg-vibrant-red opacity-20 filter blur-xl z-0 animate-pulse" aria-hidden="true"></div>
           </motion.div>
           <motion.p
             className="text-light-gray font-sans font-light mt-4"
